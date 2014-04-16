@@ -11,12 +11,12 @@ R                  := "$(R_HOME)/bin/R" --vanilla
 RSCRIPT            := Rscript --vanilla
 RM                 := rm -rf
 RMDIR              := rmdir --ignore-fail-on-non-empty
-PACKAGE            := "maker" ## default package
-VERSION            := $(shell grep Version ${PACKAGE}/DESCRIPTION | sed -e 's/Version: //')
+PACKAGE            := maker ## default package
+VERSION            := $(shell grep -s Version ${PACKAGE}/DESCRIPTION | sed -e 's/Version: //')
 TARGZ              := ${PACKAGE}_${VERSION}.tar.gz
-CHECKARGS          := --no-build-vignettes ## "--as-cran"
+CHECKARGS          := --no-build-vignettes 
 INSTALLARGS        := --install-tests
-WARNING_ARE_ERRORS := 1
+WARNINGS_AS_ERRORS := 1
 VIGNETTES          := 1
 CRAN               := 0
 
@@ -59,6 +59,17 @@ help targets usage:
 	@echo " tests                       - run unit tests on installed package"
 	@echo " usage                       - show this usage output"
 	@echo " win-builder                 - build package and send to win-builder.r-project.org"
+	@echo ""
+	@echo "Available variables:"
+	@echo ""
+	@echo " PACKAGE                     - name of the target package (default is maker)"
+	@echo " VIGNETTES                   - should vignettes be build (default is 1). If 0, build --no-build-vignettes is used"
+	@echo " WARNINGS_AS_ERRORS          - fail on warnings (default is 1)"
+	@echo " CRAN                        - check using --as-cran (default is 0)"
+	@echo ""
+	@echo "Misc:"
+	@echo ""
+	@echo " Vignettes are not build when checking: R CMD check --no-build-vignettes"
 
 build:
 	${R} CMD build ${BUILDARGS} ${PACKAGE}
@@ -73,7 +84,7 @@ vignettes:
 check: build
 	${R} CMD check ${CHECKARGS} ${TARGZ} && \
 	grep "WARNING" ${PACKAGE}.Rcheck/00check.log > /dev/null ; \
-	if [ $$? -eq 0 ] ; then exit ${WARNING_ARE_ERRORS}; fi
+	if [ $$? -eq 0 ] ; then exit ${WARNINGS_AS_ERRORS}; fi
 
 check-reverse-dependencies check-downstream: install
 	cd ${PACKAGE} && ${RSCRIPT} ./maker/include/check-reverse-dependencies.R
