@@ -30,17 +30,18 @@ CHECKARGS += --as-cran
 endif
 
 
-.PHONEY: build vignettes check check-downstream				\
+.PHONEY: build vignettes check check-only check-downstream		\
 	check-reverse-dependencies clean clean-all clean-tar help	\
-	install install-dependencies install-upstream remove roxygen	\
-	rd run-demos targets tests usage win-builder
+	install install-only install-dependencies install-upstream	\
+	remove roxygen rd run-demos targets tests usage win-builder
 
 help targets usage:
 	@echo "Available targets:"
 	@echo ""
 	@echo " build                       - build source package"
 	@echo " vignettes                   - build vignettes in ./${PACKAGE}/vignettes"
-	@echo " check                       - check package"
+	@echo " check                       - build and check package"
+	@echo " check-only                  - check package"
 	@echo " check-downstream            - check packages which depend on this package"
 	@echo " check-reverse-dependencies  - check packages which depend on this package"
 	@echo " clean                       - remove temporary files and .Rcheck"
@@ -48,7 +49,8 @@ help targets usage:
 	@echo " clean-vignettes             - remove vignettes in inst/doc/"
 	@echo " clean-all                   - combine \"clean\" and \"clean-all\""
 	@echo " help                        - show this usage output"
-	@echo " install                     - install package"
+	@echo " install                     - build and install package"
+	@echo " install-only                - install package"
 	@echo " install-dependencies        - install package dependencies"
 	@echo " install-upstream            - install package dependencies"
 	@echo " remove                      - remove package"
@@ -80,8 +82,12 @@ vignettes:
 		${R} CMD Sweave --engine=knitr::knitr --pdf $$v; \
 	done
 
-
 check: build
+	${R} CMD check ${CHECKARGS} ${TARGZ} && \
+	grep "WARNING" ${PACKAGE}.Rcheck/00check.log > /dev/null ; \
+	if [ $$? -eq 0 ] ; then exit ${WARNINGS_AS_ERRORS}; fi
+
+check-only: 
 	${R} CMD check ${CHECKARGS} ${TARGZ} && \
 	grep "WARNING" ${PACKAGE}.Rcheck/00check.log > /dev/null ; \
 	if [ $$? -eq 0 ] ; then exit ${WARNINGS_AS_ERRORS}; fi
@@ -108,6 +114,9 @@ install-dependencies install-upstream:
 	cd ${PACKAGE} && ${RSCRIPT} ../maker/include/install-dependencies.R
 
 install: build
+	${R} CMD INSTALL ${INSTALLARGS} ${TARGZ}
+
+install-only:
 	${R} CMD INSTALL ${INSTALLARGS} ${TARGZ}
 
 remove:
