@@ -107,8 +107,10 @@ check-reverse-dependencies check-downstream: install
 	cd ${PKG} && ${RSCRIPT} ../maker/include/check-reverse-dependencies.R
 
 clean:
-	cd ${PKG} && ${RM} src/*.o src/*.so; && ${RM} ${PKG}.Rcheck && \
-	find . -name '.Rhistory' -exec rm '{}' \; && ${RM} *~
+	${RM} ${PKG}/src/*.o ${PKG}/src/*.so
+	${RM} ${PKG}.Rcheck
+	${RM} ${PKG}/*~
+	find . -name '.Rhistory' -exec rm '{}' \;
 
 clean-tar:
 	${RM} ${TARGZ}
