@@ -82,10 +82,7 @@ vignettes:
 		${R} CMD Sweave --engine=knitr::knitr --pdf $$v; \
 	done
 
-check: build
-	${R} CMD check ${CHECKARGS} ${TARGZ} && \
-	grep "WARNING" ${PACKAGE}.Rcheck/00check.log > /dev/null ; \
-	if [ $$? -eq 0 ] ; then exit ${WARNINGS_AS_ERRORS}; fi
+check: | build check-only
 
 check-only:
 	${R} CMD check ${CHECKARGS} ${TARGZ} && \
@@ -113,8 +110,7 @@ clean-all: clean clean-tar clean-vignettes
 install-dependencies install-upstream:
 	cd ${PACKAGE} && ${RSCRIPT} ../maker/include/install-dependencies.R
 
-install: build
-	${R} CMD INSTALL ${INSTALLARGS} ${TARGZ}
+install: | build install-only
 
 install-only:
 	${R} CMD INSTALL ${INSTALLARGS} ${TARGZ}
