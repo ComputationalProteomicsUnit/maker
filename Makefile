@@ -1,28 +1,28 @@
 ## ideas and most of the code stolen from https://github.com/tudo-r/makeR
 ## updated to be run outside of the package directory
 
-setvars:
 ifeq (${R_HOME},)
-R_HOME= $(shell R RHOME)
+R_HOME = $(shell R RHOME)
 endif
-
 
 R                  := "$(R_HOME)/bin/R" --vanilla
 RSCRIPT            := "$(R_HOME)/bin/Rscript" --vanilla
 RM                 := rm -rf
 RMDIR              := rmdir --ignore-fail-on-non-empty
-PACKAGE            := maker ## default package
-VERSION            := $(shell grep -s Version ${PACKAGE}/DESCRIPTION | sed -e 's/Version: //')
-TARGZ              := ${PACKAGE}_${VERSION}.tar.gz
-CHECKARGS          := --no-build-vignettes
+PKG                := maker ## default package
+VERSION            := $(shell grep -s Version ${PKG}/DESCRIPTION | sed -e 's/Version: //')
+TARGZ              := ${PKG}_${VERSION}.tar.gz
+BUILDARGS          := --no-build-vignettes
+CHECKARGS          := --no-vignettes --no-build-vignettes
 INSTALLARGS        := --install-tests
 WARNINGS_AS_ERRORS := 1
-VIGNETTES          := 1
+VIG                := 1
 CRAN               := 0
 
 
-ifeq (${VIGNETTES},0)
-BUILDARGS=--no-build-vignettes
+ifeq (${VIG},0)
+BUILDARGS := $(filter-out --no-build-vignettes,$(BUILDARGS))
+CHECKARGS := $(filter-out --no-vignettes --no-build-vignettes,$(CHECKARGS))
 endif
 
 ifeq (${CRAN},1)
@@ -39,7 +39,7 @@ help targets usage:
 	@echo "Available targets:"
 	@echo ""
 	@echo " build                       - build source package"
-	@echo " vignettes                   - build vignettes in ./${PACKAGE}/vignettes"
+	@echo " vignettes                   - build vignettes in ./${PKG}/vignettes"
 	@echo " check                       - build and check package"
 	@echo " check-only                  - check package"
 	@echo " check-downstream            - check packages which depend on this package"
@@ -64,8 +64,8 @@ help targets usage:
 	@echo ""
 	@echo "Available variables:"
 	@echo ""
-	@echo " PACKAGE                     - name of the target package (default is maker)"
-	@echo " VIGNETTES                   - should vignettes be build (default is 1). If 0, build --no-build-vignettes is used"
+	@echo " PKG                         - name of the target package (default is maker)"
+	@echo " VIG                         - should vignettes be build (default is 1). If 0, build --no-build-vignettes is used"
 	@echo " WARNINGS_AS_ERRORS          - fail on warnings (default is 1)"
 	@echo " CRAN                        - check using --as-cran (default is 0)"
 	@echo ""
@@ -74,11 +74,11 @@ help targets usage:
 	@echo " Vignettes are not build when checking: R CMD check --no-build-vignettes"
 
 build:
-	${R} CMD build ${BUILDARGS} ${PACKAGE}
+	${R} CMD build ${BUILDARGS} ${PKG}
 
 vignettes:
-	cd ${PACKAGE}/vignettes/ && \
-	for v in `ls *Rnw`; do \
+	cd ${PKG}/vignettes/ && \
+	for v in `ls *.Rnw`; do \
 		${R} CMD Sweave --engine=knitr::knitr --pdf $$v; \
 	done
 
@@ -86,15 +86,15 @@ check: | build check-only
 
 check-only:
 	${R} CMD check ${CHECKARGS} ${TARGZ} && \
-	grep "WARNING" ${PACKAGE}.Rcheck/00check.log > /dev/null ; \
+	grep "WARNING" ${PKG}.Rcheck/00check.log > /dev/null ; \
 	if [ $$? -eq 0 ] ; then exit ${WARNINGS_AS_ERRORS}; fi
 
 check-reverse-dependencies check-downstream: install
-	cd ${PACKAGE} && ${RSCRIPT} ./maker/include/check-reverse-dependencies.R
+	cd ${PKG} && ${RSCRIPT} ../maker/include/check-reverse-dependencies.R
 
 clean:
 	${RM} src/*.o src/*.so
-	${RM} ${PACKAGE}.Rcheck
+	${RM} ${PKG}.Rcheck
 	find . -name '.Rhistory' -exec rm '{}' \;
 	rm -f *~
 
@@ -102,13 +102,13 @@ clean-tar:
 	${RM} ${TARGZ}
 
 clean-vignettes:
-	${RSCRIPT} ./maker/include/clean-vignettes.R
-	${RMDIR} inst/doc
+	cd ${PKG} && ${RSCRIPT} ../maker/include/clean-vignettes.R && \
+	${RMDIR} inst/doc && ${RM} vignettes/.build.timestamp
 
 clean-all: clean clean-tar clean-vignettes
 
 install-dependencies install-upstream:
-	cd ${PACKAGE} && ${RSCRIPT} ../maker/include/install-dependencies.R
+	cd ${PKG} && ${RSCRIPT} ../maker/include/install-dependencies.R
 
 install: | build install-only
 
@@ -116,21 +116,20 @@ install-only:
 	${R} CMD INSTALL ${INSTALLARGS} ${TARGZ}
 
 remove:
-	${R} CMD REMOVE ${PACKAGE}
+	${R} CMD REMOVE ${PKG}
 
 roxygen: clean
-	${R} -e "library(roxygen2); roxygenize('"$(PACKAGE)"')";
+	${R} -e "library(roxygen2); roxygenize('"$(PKG)"')";
 
 rd: clean
-	${R} -e "library(roxygen2); roxygenize('"$(PACKAGE)"', roclets=\"rd\")";
+	${R} -e "library(roxygen2); roxygenize('"$(PKG)"', roclets=\"rd\")";
 
 run-demos:
 	${RSCRIPT} ./maker/include/run-demos.R
 
 tests:
-	${R} -e "library('testthat'); test_package('"${PACKAGE}"')"
+	${R} -e "library('testthat'); test_package('"${PKG}"')"
 
 win-builder: check
 	ncftpput win-builder.r-project.org R-release ${PKGTGZ}
-
 
