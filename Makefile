@@ -8,7 +8,6 @@ endif
 R                  := "$(R_HOME)/bin/R" --vanilla
 RSCRIPT            := "$(R_HOME)/bin/Rscript" --vanilla
 RM                 := rm -rf
-RMDIR              := rmdir --ignore-fail-on-non-empty
 PKG                := maker## default package (there must be no whitespace behind the PKG name)
 VERSION            := $(shell grep -s Version ${PKG}/DESCRIPTION | sed -e 's/Version: //')
 TARGZ              := ${PKG}_${VERSION}.tar.gz
@@ -21,6 +20,7 @@ CRAN               := 0
 IGNORE             := ".git/* .svn/* sandbox/*"
 IGNOREPATTERN      := $(shell echo "${IGNORE}" | sed 's:\([^[:space:]]\+\):-a -not -path "${PKG}/\1":g; s:^-a \+::')
 PKGFILES           := $(shell find ${PKG} -type f \( ${IGNOREPATTERN} \))
+VIGFILES           := $(shell find ${PKG} -type f -name *.Rnw)
 
 
 ifeq (${VIG},1)
@@ -116,8 +116,8 @@ clean-tar:
 	${RM} ${TARGZ}
 
 clean-vignettes:
-	cd ${PKG} && ${RSCRIPT} ../maker/include/clean-vignettes.R && \
-	${RMDIR} inst/doc && ${RM} vignettes/.build.timestamp
+	${RM} $(VIGFILES:.Rnw=.pdf) && \
+	${RM} ${PKG}/vignettes/.build.timestamp
 
 clean-all: clean clean-tar clean-vignettes
 
