@@ -88,7 +88,6 @@ help targets usage:
 build: ${TARGZ}
 
 ${TARGZ}: ${PKGFILES}
-	@echo "New files: $?"
 	${R} CMD build ${BUILDARGS} ${PKG}
 
 vignettes:
@@ -108,10 +107,8 @@ check-reverse-dependencies check-downstream: install
 	cd ${PKG} && ${RSCRIPT} ../maker/include/check-reverse-dependencies.R
 
 clean:
-	${RM} src/*.o src/*.so
-	${RM} ${PKG}.Rcheck
-	find . -name '.Rhistory' -exec rm '{}' \;
-	rm -f *~
+	cd ${PKG} && ${RM} src/*.o src/*.so; && ${RM} ${PKG}.Rcheck && \
+	find . -name '.Rhistory' -exec rm '{}' \; && ${RM} *~
 
 clean-tar:
 	${RM} ${TARGZ}
