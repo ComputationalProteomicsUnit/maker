@@ -66,6 +66,8 @@ help targets usage:
 	@echo " usage                       - show this usage output"
 	@echo " win-builder                 - build package and send to win-builder.r-project.org"
 	@echo ""
+	@echo " maker                       - updates maker toolbox"
+	@echo ""
 	@echo "Available variables:"
 	@echo ""
 	@echo " PKG                         - name of the target package (default is maker)"
@@ -136,4 +138,7 @@ tests:
 
 win-builder: check
 	ncftpput win-builder.r-project.org R-release ${PKGTGZ}
+
+maker:
+	cd maker && git checkout master && git pull
 
