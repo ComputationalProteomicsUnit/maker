@@ -30,9 +30,4 @@ symlinks and use it.
 
 ## Update maker
 
-    cd maker
-    git checkout master
-    git pull
-
-
-
+    make maker
