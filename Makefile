@@ -18,9 +18,12 @@ INSTALLARGS        := --install-tests
 WARNINGS_AS_ERRORS := 1
 VIG                := 1
 CRAN               := 0
+IGNORE             := ".git/* .svn/* sandbox/*"
+IGNOREPATTERN      := $(shell echo "${IGNORE}" | sed 's:\([^[:space:]]\+\):-a -not -path "${PKG}/\1":g; s:^-a \+::')
+PKGFILES           := $(shell find ${PKG} -type f \( ${IGNOREPATTERN} \))
 
 
-ifeq (${VIG},0)
+ifeq (${VIG},1)
 BUILDARGS := $(filter-out --no-build-vignettes,$(BUILDARGS))
 CHECKARGS := $(filter-out --no-vignettes --no-build-vignettes,$(CHECKARGS))
 endif
@@ -82,7 +85,9 @@ help targets usage:
 	@echo ""
 	@echo " Vignettes are not build when checking: R CMD check --no-build-vignettes"
 
-build:
+build: ${TARGZ}
+
+${TARGZ}: ${PKGFILES}
 	${R} CMD build ${BUILDARGS} ${PKG}
 
 vignettes:
