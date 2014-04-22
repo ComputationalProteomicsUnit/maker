@@ -36,7 +36,8 @@ endif
 .PHONEY: build vignettes check check-only check-downstream \
 	check-reverse-dependencies clean clean-all clean-tar help \
 	install install-only install-dependencies install-upstream \
-	maker remove roxygen rd run-demos targets tests usage win-builder
+	maker .maker remove roxygen rd run-demos targets tests usage \
+	win-builder
 
 help targets usage:
 	@echo "Usage:"
@@ -156,6 +157,8 @@ tests:
 win-builder: check
 	ncftpput win-builder.r-project.org R-release ${TARGZ}
 
-maker:
+maker: .maker
+
+.maker:
 	cd maker && git checkout master && git pull
 
