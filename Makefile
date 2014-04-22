@@ -36,6 +36,10 @@ endif
 	remove roxygen rd run-demos targets tests usage win-builder
 
 help targets usage:
+	@echo "Usage:"
+	@echo ""
+	@echo " make TARGET PKG=package"
+	@echo ""
 	@echo "Available targets:"
 	@echo ""
 	@echo " build                       - build source package"
