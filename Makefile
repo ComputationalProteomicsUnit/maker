@@ -148,7 +148,7 @@ rd: clean
 	${R} -e "library(roxygen2); roxygenize('"$(PKG)"', roclets=\"rd\")";
 
 run-demos:
-	${RSCRIPT} ./maker/include/run-demos.R
+	cd ${PKG} && ${RSCRIPT} ../maker/include/run-demos.R
 
 tests:
 	${R} -e "library('testthat'); test_package('"${PKG}"')"
