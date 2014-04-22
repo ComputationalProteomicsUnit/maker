@@ -9,7 +9,7 @@ R                  := "$(R_HOME)/bin/R" --vanilla
 RSCRIPT            := "$(R_HOME)/bin/Rscript" --vanilla
 RM                 := rm -rf
 RMDIR              := rmdir --ignore-fail-on-non-empty
-PKG                := maker ## default package
+PKG                := maker## default package (there must be no whitespace behind the PKG name)
 VERSION            := $(shell grep -s Version ${PKG}/DESCRIPTION | sed -e 's/Version: //')
 TARGZ              := ${PKG}_${VERSION}.tar.gz
 BUILDARGS          := --no-build-vignettes
@@ -33,9 +33,9 @@ CHECKARGS += --as-cran
 endif
 
 
-.PHONEY: build vignettes check check-only check-downstream		\
-	check-reverse-dependencies clean clean-all clean-tar help	\
-	install install-only install-dependencies install-upstream	\
+.PHONEY: build vignettes check check-only check-downstream \
+	check-reverse-dependencies clean clean-all clean-tar help \
+	install install-only install-dependencies install-upstream \
 	remove roxygen rd run-demos targets tests usage win-builder
 
 help targets usage:
@@ -88,6 +88,7 @@ help targets usage:
 build: ${TARGZ}
 
 ${TARGZ}: ${PKGFILES}
+	@echo "New files: $?"
 	${R} CMD build ${BUILDARGS} ${PKG}
 
 vignettes:
