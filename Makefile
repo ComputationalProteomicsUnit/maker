@@ -53,6 +53,9 @@ help targets usage:
 	@echo " clean-vignettes             - remove vignettes in inst/doc/"
 	@echo " clean-all                   - combine \"clean\" and \"clean-all\""
 	@echo " help                        - show this usage output"
+	@echo " increment-version-major     - increment major version number (X++.1)"
+	@echo " increment-version-minor     - increment minor version number (1.X++)"
+	@echo " increment-version-patch     - increment patch version number (1.1.X++)"
 	@echo " install                     - build and install package"
 	@echo " install-only                - install package"
 	@echo " install-dependencies        - install package dependencies"
@@ -113,13 +116,22 @@ clean-vignettes:
 
 clean-all: clean clean-tar clean-vignettes
 
-install-dependencies install-upstream:
-	cd ${PKG} && ${RSCRIPT} ../maker/include/install-dependencies.R
+increment-version-major:
+	@cd ${PKG} && ${RSCRIPT} ../maker/include/increment-version.R major
+
+increment-version-minor:
+	@cd ${PKG} && ${RSCRIPT} ../maker/include/increment-version.R minor
+
+increment-version-patch:
+	@cd ${PKG} && ${RSCRIPT} ../maker/include/increment-version.R patch
 
 install: | build install-only
 
 install-only:
 	${R} CMD INSTALL ${INSTALLARGS} ${TARGZ}
+
+install-dependencies install-upstream:
+	cd ${PKG} && ${RSCRIPT} ../maker/include/install-dependencies.R
 
 remove:
 	${R} CMD REMOVE ${PKG}
