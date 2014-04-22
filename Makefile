@@ -43,7 +43,7 @@ help targets usage:
 	@echo "Available targets:"
 	@echo ""
 	@echo " build                       - build source package"
-	@echo " vignettes                   - build vignettes in ./${PKG}/vignettes"
+	@echo " vignettes                   - build vignettes in ./\$${PKG}/vignettes"
 	@echo " check                       - build and check package"
 	@echo " check-only                  - check package"
 	@echo " check-downstream            - check packages which depend on this package"
