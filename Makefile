@@ -1,5 +1,5 @@
 ## ideas and most of the code stolen from https://github.com/tudo-r/makeR
-## updated to be run outside of the package directory 
+## updated to be run outside of the package directory
 
 setvars:
 ifeq (${R_HOME},)
@@ -8,13 +8,13 @@ endif
 
 
 R                  := "$(R_HOME)/bin/R" --vanilla
-RSCRIPT            := Rscript --vanilla
+RSCRIPT            := "$(R_HOME)/bin/Rscript" --vanilla
 RM                 := rm -rf
 RMDIR              := rmdir --ignore-fail-on-non-empty
 PACKAGE            := maker ## default package
 VERSION            := $(shell grep -s Version ${PACKAGE}/DESCRIPTION | sed -e 's/Version: //')
 TARGZ              := ${PACKAGE}_${VERSION}.tar.gz
-CHECKARGS          := --no-build-vignettes 
+CHECKARGS          := --no-build-vignettes
 INSTALLARGS        := --install-tests
 WARNINGS_AS_ERRORS := 1
 VIGNETTES          := 1
@@ -87,7 +87,7 @@ check: build
 	grep "WARNING" ${PACKAGE}.Rcheck/00check.log > /dev/null ; \
 	if [ $$? -eq 0 ] ; then exit ${WARNINGS_AS_ERRORS}; fi
 
-check-only: 
+check-only:
 	${R} CMD check ${CHECKARGS} ${TARGZ} && \
 	grep "WARNING" ${PACKAGE}.Rcheck/00check.log > /dev/null ; \
 	if [ $$? -eq 0 ] ; then exit ${WARNINGS_AS_ERRORS}; fi
