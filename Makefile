@@ -137,7 +137,7 @@ tests:
 	${R} -e "library('testthat'); test_package('"${PKG}"')"
 
 win-builder: check
-	ncftpput win-builder.r-project.org R-release ${PKGTGZ}
+	ncftpput win-builder.r-project.org R-release ${TARGZ}
 
 maker:
 	cd maker && git checkout master && git pull
