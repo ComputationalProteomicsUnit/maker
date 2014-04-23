@@ -112,6 +112,8 @@ clean:
 	${RM} ${PKG}.Rcheck
 	${RM} ${PKG}/*~
 	find . -name '.Rhistory' -exec rm '{}' \;
+	${RM} ${PKG}/vignettes/.\#*
+	${RM} ${PKG}/vignettes/\#*
 
 clean-tar:
 	${RM} ${TARGZ}
