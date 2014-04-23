@@ -34,7 +34,7 @@ symlinks and use it.
 ## Configuration
 
 You could specify your own default variables in `~/.makerrc`. Please see, e.g.
-(.makerrc):
+[.makerrc](.makerrc):
 
 ```basemake
 ## configuration Makefile for maker
