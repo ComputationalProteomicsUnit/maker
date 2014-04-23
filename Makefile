@@ -20,7 +20,8 @@ CRAN               := 0
 COLOURS            := 1
 IGNORE             := ".git/* .svn/* sandbox/*"
 IGNOREPATTERN      := $(shell echo "${IGNORE}" | sed 's:\([^[:space:]]\+\):-a -not -path "${PKG}/\1":g; s:^-a \+::')
-INCLUDEDIR         := "$(dir $(realpath $(lastword $(MAKEFILE_LIST))))/include/"
+MAKERDIR           := $(dir $(realpath $(lastword $(MAKEFILE_LIST))))
+INCLUDEDIR         := ${MAKERDIR}/include/
 PKGFILES           := $(shell find ${PKG} -type f \( ${IGNOREPATTERN} \))
 VIGFILES           := $(shell find ${PKG} -type f -name *.Rnw)
 
@@ -172,5 +173,5 @@ win-builder: check
 maker: .maker
 
 .maker:
-	cd maker && git checkout master && git pull
+	cd ${MAKERDIR} && git checkout master && git pull
 
