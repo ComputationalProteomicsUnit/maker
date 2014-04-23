@@ -22,8 +22,8 @@ IGNORE             := ".git/* .svn/* sandbox/*"
 IGNOREPATTERN      := $(shell echo "${IGNORE}" | sed 's:\([^[:space:]]\+\):-a -not -path "${PKG}/\1":g; s:^-a \+::')
 MAKERDIR           := $(dir $(realpath $(lastword $(MAKEFILE_LIST))))
 INCLUDEDIR         := ${MAKERDIR}/include/
-PKGFILES           := $(shell find ${PKG} -type f \( ${IGNOREPATTERN} \))
-VIGFILES           := $(shell find ${PKG} -type f -name *.Rnw)
+PKGFILES           := $(shell find ${PKG} -type f \( ${IGNOREPATTERN} \) 2>/dev/null)
+VIGFILES           := $(shell find ${PKG} -type f -name *.Rnw 2>/dev/null)
 
 ## overwrite default variables by variables in ~/.makerrc
 ifneq ($(wildcard ~/.makerrc),)
