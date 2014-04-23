@@ -97,9 +97,9 @@ vignettes:
 		${R} CMD Sweave --engine=knitr::knitr --pdf $$v; \
 	done
 
-check: | build check-only
+check: | clean build check-only
 
-check-only:
+check-only: 
 	${R} CMD check ${CHECKARGS} ${TARGZ} && \
 	grep "WARNING" ${PKG}.Rcheck/00check.log > /dev/null ; \
 	if [ $$? -eq 0 ] ; then exit ${WARNINGS_AS_ERRORS}; fi
