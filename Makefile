@@ -86,7 +86,7 @@ help targets usage:
 	@echo ""
 	@echo " Vignettes are not build when checking: R CMD check --no-build-vignettes"
 
-build: ${TARGZ}
+build: clean ${TARGZ}
 
 ${TARGZ}: ${PKGFILES}
 	${R} CMD build ${BUILDARGS} ${PKG}
@@ -97,9 +97,9 @@ vignettes:
 		${R} CMD Sweave --engine=knitr::knitr --pdf $$v; \
 	done
 
-check: | clean build check-only
+check: | build check-only
 
-check-only: 
+check-only:
 	${R} CMD check ${CHECKARGS} ${TARGZ} && \
 	grep "WARNING" ${PKG}.Rcheck/00check.log > /dev/null ; \
 	if [ $$? -eq 0 ] ; then exit ${WARNINGS_AS_ERRORS}; fi
