@@ -1,0 +1,6 @@
+## configuration Makefile for maker
+
+## don't build vignettes
+VIG  := 0
+## always use --as-cran
+CRAN := 1

@@ -27,6 +27,24 @@ symlinks and use it.
 	ln -s maker/Makefile .
 	make help
 
-## Update maker
+## Update `maker`
 
     make maker
+
+## Configuration
+
+You could specify your own default variables in `~/.makerrc`. Please see, e.g.
+(.makerrc):
+
+```basemake
+## configuration Makefile for maker
+
+## don't build vignettes
+VIG  := 0
+
+## always use --as-cran
+CRAN := 1
+```
+
+The `~/.makerrc` is a Makefile as well. So you can use every supported
+Makefile command.
