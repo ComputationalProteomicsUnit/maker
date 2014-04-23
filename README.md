@@ -25,7 +25,6 @@ symlinks and use it.
 
 	git clone git@github.com:ComputationalProteomicsUnit/maker.git
 	ln -s maker/Makefile .
-	ln -s maker/include .
 	make help
 
 ## Update maker
