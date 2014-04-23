@@ -19,9 +19,9 @@ VIG                := 1
 CRAN               := 0
 IGNORE             := ".git/* .svn/* sandbox/*"
 IGNOREPATTERN      := $(shell echo "${IGNORE}" | sed 's:\([^[:space:]]\+\):-a -not -path "${PKG}/\1":g; s:^-a \+::')
+INCLUDEDIR         := "$(dir $(realpath $(lastword $(MAKEFILE_LIST))))/include/"
 PKGFILES           := $(shell find ${PKG} -type f \( ${IGNOREPATTERN} \))
 VIGFILES           := $(shell find ${PKG} -type f -name *.Rnw)
-
 
 ifeq (${VIG},1)
 BUILDARGS := $(filter-out --no-build-vignettes,$(BUILDARGS))
@@ -105,7 +105,7 @@ check-only:
 	if [ $$? -eq 0 ] ; then exit ${WARNINGS_AS_ERRORS}; fi
 
 check-reverse-dependencies check-downstream: install
-	cd ${PKG} && ${RSCRIPT} ../maker/include/check-reverse-dependencies.R
+	cd ${PKG} && ${RSCRIPT} ${INCLUDEDIR}/check-reverse-dependencies.R
 
 clean:
 	${RM} ${PKG}/src/*.o ${PKG}/src/*.so
@@ -125,13 +125,13 @@ clean-vignettes:
 clean-all: clean clean-tar clean-vignettes
 
 increment-version-major:
-	@cd ${PKG} && ${RSCRIPT} ../maker/include/increment-version.R major
+	@cd ${PKG} && ${RSCRIPT} ${INCLUDEDIR}/increment-version.R major
 
 increment-version-minor:
-	@cd ${PKG} && ${RSCRIPT} ../maker/include/increment-version.R minor
+	@cd ${PKG} && ${RSCRIPT} ${INCLUDEDIR}/increment-version.R minor
 
 increment-version-patch:
-	@cd ${PKG} && ${RSCRIPT} ../maker/include/increment-version.R patch
+	@cd ${PKG} && ${RSCRIPT} ${INCLUDEDIR}/increment-version.R patch
 
 install: | build install-only
 
@@ -139,7 +139,7 @@ install-only:
 	${R} CMD INSTALL ${INSTALLARGS} ${TARGZ}
 
 install-dependencies install-upstream:
-	cd ${PKG} && ${RSCRIPT} ../maker/include/install-dependencies.R
+	cd ${PKG} && ${RSCRIPT} ${INCLUDEDIR}/install-dependencies.R
 
 remove:
 	${R} CMD REMOVE ${PKG}
@@ -151,7 +151,7 @@ rd: clean
 	${R} -e "library(roxygen2); roxygenize('"$(PKG)"', roclets=\"rd\")";
 
 run-demos:
-	cd ${PKG} && ${RSCRIPT} ../maker/include/run-demos.R
+	cd ${PKG} && ${RSCRIPT} ${INCLUDEDIR}/run-demos.R
 
 tests:
 	${R} -e "library('testthat'); test_package('"${PKG}"')"
