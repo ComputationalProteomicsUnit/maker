@@ -17,6 +17,7 @@ INSTALLARGS        := --install-tests
 WARNINGS_AS_ERRORS := 1
 VIG                := 1
 CRAN               := 0
+COLOURS            := 1
 IGNORE             := ".git/* .svn/* sandbox/*"
 IGNOREPATTERN      := $(shell echo "${IGNORE}" | sed 's:\([^[:space:]]\+\):-a -not -path "${PKG}/\1":g; s:^-a \+::')
 INCLUDEDIR         := "$(dir $(realpath $(lastword $(MAKEFILE_LIST))))/include/"
@@ -86,6 +87,7 @@ help targets usage:
 	@echo " VIG                         - should vignettes be build (default is 1). If 0, build --no-build-vignettes is used"
 	@echo " WARNINGS_AS_ERRORS          - fail on warnings (default is 1)"
 	@echo " CRAN                        - check using --as-cran (default is 0)"
+	@echo " COLOURS                     - using colours for R CMD check results (default is 1)"
 	@echo ""
 	@echo "Misc:"
 	@echo ""
@@ -94,7 +96,8 @@ help targets usage:
 build: clean ${TARGZ}
 
 ${TARGZ}: ${PKGFILES}
-	${R} CMD build ${BUILDARGS} ${PKG}
+	${R} CMD build ${BUILDARGS} ${PKG} | \
+	COLOURS=$(COLOURS) ${INCLUDEDIR}/color-output.sh
 
 vignettes:
 	cd ${PKG}/vignettes/ && \
@@ -105,7 +108,8 @@ vignettes:
 check: | build check-only
 
 check-only:
-	${R} CMD check ${CHECKARGS} ${TARGZ} && \
+	${R} CMD check ${CHECKARGS} ${TARGZ} | \
+	COLOURS=$(COLOURS) ${INCLUDEDIR}/color-output.sh && \
 	grep "WARNING" ${PKG}.Rcheck/00check.log > /dev/null ; \
 	if [ $$? -eq 0 ] ; then exit ${WARNINGS_AS_ERRORS}; fi
 
@@ -141,7 +145,8 @@ increment-version-patch:
 install: | build install-only
 
 install-only:
-	${R} CMD INSTALL ${INSTALLARGS} ${TARGZ}
+	${R} CMD INSTALL ${INSTALLARGS} ${TARGZ} | \
+	COLOURS=$(COLOURS) ${INCLUDEDIR}/color-output.sh
 
 install-dependencies install-upstream:
 	cd ${PKG} && ${RSCRIPT} ${INCLUDEDIR}/install-dependencies.R
