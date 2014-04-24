@@ -2,7 +2,7 @@
 ## updated to be run outside of the package directory
 
 ifeq (${R_HOME},)
-	R_HOME = $(shell R RHOME)
+  R_HOME = $(shell R RHOME)
 endif
 
 R                  := "$(R_HOME)/bin/R" --vanilla
@@ -27,16 +27,16 @@ VIGFILES           := $(shell find ${PKG} -type f -name *.Rnw 2>/dev/null)
 
 ## overwrite default variables by variables in ~/.makerrc
 ifneq ($(wildcard ~/.makerrc),)
-	include ~/.makerrc
+  include ~/.makerrc
 endif
 
 ifeq (${VIG},1)
-	BUILDARGS := $(filter-out --no-build-vignettes,$(BUILDARGS))
-	CHECKARGS := $(filter-out --no-vignettes --no-build-vignettes,$(CHECKARGS))
+  BUILDARGS := $(filter-out --no-build-vignettes,$(BUILDARGS))
+  CHECKARGS := $(filter-out --no-vignettes --no-build-vignettes,$(CHECKARGS))
 endif
 
 ifeq (${CRAN},1)
-	CHECKARGS += --as-cran
+  CHECKARGS += --as-cran
 endif
 
 
