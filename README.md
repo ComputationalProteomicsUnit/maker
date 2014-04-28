@@ -31,6 +31,10 @@ symlinks and use it.
 
     make maker
 
+## Help
+
+    make help
+
 ## Configuration
 
 You could specify your own default variables in `~/.makerrc`. Please see, e.g.
