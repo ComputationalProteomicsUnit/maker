@@ -40,11 +40,11 @@ ifeq (${CRAN},1)
 endif
 
 
-.PHONEY: build vignettes check check-only check-downstream \
-	check-reverse-dependencies clean clean-all clean-tar help \
-	install install-only install-dependencies install-upstream \
-	maker .maker remove roxygen rd run-demos targets tests usage \
-	win-builder
+.PHONEY: build vignettes check check-only bioccheck bioccheck-only	\
+	check-downstream check-reverse-dependencies clean clean-all	\
+	clean-tar help install install-only install-dependencies	\
+	install-upstream maker .maker remove roxygen rd run-demos	\
+	targets tests usage win-builder
 
 help targets usage:
 	@echo "Usage:"
@@ -57,6 +57,8 @@ help targets usage:
 	@echo " vignettes                   - build vignettes in ./\$${PKG}/vignettes"
 	@echo " check                       - build and check package"
 	@echo " check-only                  - check package"
+	@echo " bioccheck                   - build, check and BiocCheck package"
+	@echo " bioccheck-only              - BiocCheck package"
 	@echo " check-downstream            - check packages which depend on this package"
 	@echo " check-reverse-dependencies  - check packages which depend on this package"
 	@echo " clean                       - remove temporary files and .Rcheck"
@@ -113,6 +115,16 @@ check-only:
 	COLOURS=$(COLOURS) ${INCLUDEDIR}/color-output.sh && \
 	grep "WARNING" ${PKG}.Rcheck/00check.log > /dev/null ; \
 	if [ $$? -eq 0 ] ; then exit ${WARNINGS_AS_ERRORS}; fi
+
+
+bioccheck: | check bioccheck-only
+
+bioccheck-only: 
+	${R} CMD BiocCheck ${CHECKARGS} ${TARGZ} 2>&1 | \
+	COLOURS=$(COLOURS) ${INCLUDEDIR}/color-output.sh && \
+	grep "WARNING" ${PKG}.Rcheck/00check.log > /dev/null ; \
+	if [ $$? -eq 0 ] ; then exit ${WARNINGS_AS_ERRORS}; fi
+
 
 check-reverse-dependencies check-downstream: install
 	cd ${PKG} && ${RSCRIPT} ${INCLUDEDIR}/check-reverse-dependencies.R
