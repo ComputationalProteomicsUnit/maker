@@ -33,7 +33,65 @@ symlinks and use it.
 
 ## Help
 
-    make help
+```sh
+$make help
+
+Usage:
+
+ make TARGET PKG=package
+
+Available targets:
+
+ build                       - build source package
+ vignettes                   - build vignettes in ./${PKG}/vignettes
+ check                       - build and check package
+ check-only                  - check package
+ bioccheck                   - build, check and BiocCheck package
+ bioccheck-only              - BiocCheck package
+ check-downstream            - check packages which depend on this package
+ check-reverse-dependencies  - check packages which depend on this package
+ clean                       - remove temporary files and .Rcheck
+ clean-tar                   - remove .tar.gz archive
+ clean-vignettes             - remove vignettes in inst/doc/
+ clean-all                   - combine "clean" and "clean-all"
+ help                        - show this usage output
+ increment-version-major     - increment major version number (X++.1)
+ increment-version-minor     - increment minor version number (1.X++)
+ increment-version-patch     - increment patch version number (1.1.X++)
+ install                     - build and install package
+ install-only                - install package
+ install-dependencies        - install package dependencies
+ install-upstream            - install package dependencies
+ release                     - build package for Bioc/CRAN release (includes vignettes etc.)
+ remove                      - remove package
+ roxygen                     - roxygenize package
+ rd                          - roxygenize rd rocklet
+ run-demos                   - source and run demo/*.R files
+ targets                     - show this usage output
+ tests                       - run unit tests on installed package
+ usage                       - show this usage output
+ win-builder                 - build package and send to win-builder.r-project.org
+
+ maker                       - updates maker toolbox
+ version                     - prints latest git hash and date of maker
+
+Available variables:
+
+ PKG                         - name of the target package (default is maker)
+ VIG                         - should vignettes be build (default is 1). If 0, build --no-build-vignettes is used
+ WARNINGS_AS_ERRORS          - fail on warnings (default is 1)
+ CRAN                        - check using --as-cran (default is 0)
+ COLOURS                     - using colours for R CMD check results (default is 1)
+ RPROFILE                    - path to .Rprofile (default is /home/lgatto/dev/00_github/maker//include//Rprofile
+
+Misc:
+
+ Vignettes are not build when checking: R CMD check --no-build-vignettes
+
+Version:
+
+ a0edcf4 [2014-04-29 13:13:17 +0100]
+```
 
 ## Configuration
 

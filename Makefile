@@ -140,7 +140,7 @@ check-only:
 bioccheck: | check bioccheck-only
 
 bioccheck-only:
-	${R} CMD BiocCheck ${CHECKARGS} ${TARGZ} 2>&1 | \
+	${R} CMD BiocCheck ${TARGZ} 2>&1 | \
 	COLOURS=$(COLOURS) ${INCLUDEDIR}/color-output.sh && \
 	grep "WARNING" ${PKG}.Rcheck/00check.log > /dev/null ; \
 	if [ $$? -eq 0 ] ; then exit ${WARNINGS_AS_ERRORS}; fi
