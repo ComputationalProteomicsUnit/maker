@@ -24,6 +24,7 @@ MAKERDIR           := $(dir $(realpath $(lastword $(MAKEFILE_LIST))))
 INCLUDEDIR         := ${MAKERDIR}/include/
 PKGFILES           := $(shell find ${PKG} -type f \( ${IGNOREPATTERN} \) 2>/dev/null)
 VIGFILES           := $(shell find ${PKG} -type f -name *.Rnw 2>/dev/null)
+MAKERVERSION       := $(shell cd ${MAKERDIR} && git log -1 --format="%h [%ci]")
 
 ## overwrite default variables by variables in ~/.makerrc
 ifneq ($(wildcard ~/.makerrc),)
@@ -44,7 +45,7 @@ endif
 	check-downstream check-reverse-dependencies clean clean-all	\
 	clean-tar help install install-only install-dependencies	\
 	install-upstream maker .maker remove roxygen rd run-demos	\
-	targets tests usage win-builder
+	targets tests usage win-builder version
 
 help targets usage:
 	@echo "Usage:"
@@ -81,6 +82,7 @@ help targets usage:
 	@echo " tests                       - run unit tests on installed package"
 	@echo " usage                       - show this usage output"
 	@echo " win-builder                 - build package and send to win-builder.r-project.org"
+	@echo " version                     - prints latest git hash and date of maker"
 	@echo ""
 	@echo " maker                       - updates maker toolbox"
 	@echo ""
@@ -95,6 +97,10 @@ help targets usage:
 	@echo "Misc:"
 	@echo ""
 	@echo " Vignettes are not build when checking: R CMD check --no-build-vignettes"
+	@echo ""
+	@echo "Version:"
+	@echo ""
+	@echo " ${MAKERVERSION}"
 
 build: clean ${TARGZ}
 
@@ -119,7 +125,7 @@ check-only:
 
 bioccheck: | check bioccheck-only
 
-bioccheck-only: 
+bioccheck-only:
 	${R} CMD BiocCheck ${CHECKARGS} ${TARGZ} 2>&1 | \
 	COLOURS=$(COLOURS) ${INCLUDEDIR}/color-output.sh && \
 	grep "WARNING" ${PKG}.Rcheck/00check.log > /dev/null ; \
@@ -186,4 +192,7 @@ maker: .maker
 
 .maker:
 	cd ${MAKERDIR} && git checkout master && git pull
+
+version:
+	@echo ${MAKERVERSION}
 
