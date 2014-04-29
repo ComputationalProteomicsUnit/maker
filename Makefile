@@ -5,19 +5,17 @@ ifeq (${R_HOME},)
   R_HOME = $(shell R RHOME)
 endif
 
-R                  := "$(R_HOME)/bin/R" --vanilla
-RSCRIPT            := "$(R_HOME)/bin/Rscript" --vanilla
+R                  := "$(R_HOME)/bin/R"
+RSCRIPT            := "$(R_HOME)/bin/Rscript"
 RM                 := rm -rf
 PKG                := maker## default package (there must be no whitespace behind the PKG name)
 VERSION            := $(shell grep -s Version ${PKG}/DESCRIPTION | sed -e 's/Version: //')
 TARGZ              := ${PKG}_${VERSION}.tar.gz
 BUILDARGS          := --no-build-vignettes
 CHECKARGS          := --no-vignettes --no-build-vignettes
+RELEASERARGS       := --no-save --no-restore --no-site-file --no-environ# --vanilla-=--no-init-file
+RELEASETARGETS     := | clean-all build check-only
 INSTALLARGS        := --install-tests
-WARNINGS_AS_ERRORS := 1
-VIG                := 1
-CRAN               := 0
-COLOURS            := 1
 IGNORE             := ".git/* .svn/* sandbox/*"
 IGNOREPATTERN      := $(shell echo "${IGNORE}" | sed 's:\([^[:space:]]\+\):-a -not -path "${PKG}/\1":g; s:^-a \+::')
 MAKERDIR           := $(dir $(realpath $(lastword $(MAKEFILE_LIST))))
@@ -25,6 +23,14 @@ INCLUDEDIR         := ${MAKERDIR}/include/
 PKGFILES           := $(shell find ${PKG} -type f \( ${IGNOREPATTERN} \) 2>/dev/null)
 VIGFILES           := $(shell find ${PKG} -type f -name *.Rnw 2>/dev/null)
 MAKERVERSION       := $(shell cd ${MAKERDIR} && git log -1 --format="%h [%ci]")
+
+## user variables
+WARNINGS_AS_ERRORS := 1
+VIG                := 1
+CRAN               := 0
+BIOC               := $(shell grep -s "biocViews" ${PKG}/DESCRIPTION >/dev/null && echo 1 || echo 0)
+COLOURS            := 1
+RPROFILE           := ${INCLUDEDIR}/Rprofile
 
 ## overwrite default variables by variables in ~/.makerrc
 ifneq ($(wildcard ~/.makerrc),)
@@ -38,13 +44,17 @@ endif
 
 ifeq (${CRAN},1)
   CHECKARGS += --as-cran
+  RELEASECHECKARGSCHECKARGS += --as-cran
 endif
 
+ifeq (${BIOC},1)
+  RELEASETARGETS += bioccheck-only
+endif
 
-.PHONEY: build vignettes check check-only bioccheck bioccheck-only	\
+.PHONEY: build vignettes check check-only bioccheck bioccheck-only \
 	check-downstream check-reverse-dependencies clean clean-all	\
-	clean-tar help install install-only install-dependencies	\
-	install-upstream maker .maker remove roxygen rd run-demos	\
+	clean-tar help install install-only install-dependencies \
+	install-upstream maker .maker remove release roxygen rd run-demos \
 	targets tests usage win-builder version
 
 help targets usage:
@@ -74,6 +84,7 @@ help targets usage:
 	@echo " install-only                - install package"
 	@echo " install-dependencies        - install package dependencies"
 	@echo " install-upstream            - install package dependencies"
+	@echo " release                     - build package for Bioc/CRAN release (includes vignettes etc.)"
 	@echo " remove                      - remove package"
 	@echo " roxygen                     - roxygenize package"
 	@echo " rd                          - roxygenize rd rocklet"
@@ -82,9 +93,9 @@ help targets usage:
 	@echo " tests                       - run unit tests on installed package"
 	@echo " usage                       - show this usage output"
 	@echo " win-builder                 - build package and send to win-builder.r-project.org"
-	@echo " version                     - prints latest git hash and date of maker"
 	@echo ""
 	@echo " maker                       - updates maker toolbox"
+	@echo " version                     - prints latest git hash and date of maker"
 	@echo ""
 	@echo "Available variables:"
 	@echo ""
@@ -93,6 +104,7 @@ help targets usage:
 	@echo " WARNINGS_AS_ERRORS          - fail on warnings (default is 1)"
 	@echo " CRAN                        - check using --as-cran (default is 0)"
 	@echo " COLOURS                     - using colours for R CMD check results (default is 1)"
+	@echo " RPROFILE                    - path to .Rprofile (default is ${INCLUDEDIR}/Rprofile"
 	@echo ""
 	@echo "Misc:"
 	@echo ""
@@ -101,6 +113,7 @@ help targets usage:
 	@echo "Version:"
 	@echo ""
 	@echo " ${MAKERVERSION}"
+	@echo ""
 
 build: clean ${TARGZ}
 
@@ -122,7 +135,6 @@ check-only:
 	grep "WARNING" ${PKG}.Rcheck/00check.log > /dev/null ; \
 	if [ $$? -eq 0 ] ; then exit ${WARNINGS_AS_ERRORS}; fi
 
-
 bioccheck: | check bioccheck-only
 
 bioccheck-only:
@@ -130,7 +142,6 @@ bioccheck-only:
 	COLOURS=$(COLOURS) ${INCLUDEDIR}/color-output.sh && \
 	grep "WARNING" ${PKG}.Rcheck/00check.log > /dev/null ; \
 	if [ $$? -eq 0 ] ; then exit ${WARNINGS_AS_ERRORS}; fi
-
 
 check-reverse-dependencies check-downstream: install
 	cd ${PKG} && ${RSCRIPT} ${INCLUDEDIR}/check-reverse-dependencies.R
@@ -170,6 +181,11 @@ install-only:
 install-dependencies install-upstream:
 	cd ${PKG} && ${RSCRIPT} ${INCLUDEDIR}/install-dependencies.R
 
+release: R := R_PROFILE_USER=${RPROFILE} ${R} ${RELEASERARGS}
+release: CHECKARGS := ${RELEASECHECKARGS}
+release: BUILDARGS := ${RELEASEBUILDARGS}
+release: ${RELEASETARGETS}
+
 remove:
 	${R} CMD REMOVE ${PKG}
 
@@ -187,6 +203,7 @@ tests:
 
 win-builder: check
 	ncftpput win-builder.r-project.org R-release ${TARGZ}
+
 
 maker: .maker
 
