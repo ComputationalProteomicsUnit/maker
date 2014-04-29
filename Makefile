@@ -123,9 +123,11 @@ ${TARGZ}: ${PKGFILES}
 
 vignettes:
 	cd ${PKG}/vignettes/ && \
-	for v in `ls *.Rnw`; do \
-		${R} CMD Sweave --engine=knitr::knitr --pdf $$v; \
-	done
+		test -f Makefile && \
+		make all || \
+		( for v in `ls *.Rnw`; do \
+				${R} CMD Sweave --engine=knitr::knitr --pdf $$v; \
+			done )
 
 check: | build check-only
 
@@ -158,8 +160,10 @@ clean-tar:
 	${RM} ${TARGZ}
 
 clean-vignettes:
-	${RM} $(VIGFILES:.Rnw=.pdf) && \
-	${RM} ${PKG}/vignettes/.build.timestamp
+	test -f ${PKG}/vignettes/Makefile && \
+		(cd ${PKG}/vignettes/ && make clean) || \
+		( ${RM} $(VIGFILES:.Rnw=.pdf) && \
+	    ${RM} ${PKG}/vignettes/.build.timestamp )
 
 clean-all: clean clean-tar clean-vignettes
 
