@@ -24,6 +24,8 @@ PKGFILES           := $(shell find ${PKG} -type f \( ${IGNOREPATTERN} \) 2>/dev/
 VIGFILES           := $(shell find ${PKG} -type f -name *.Rnw 2>/dev/null)
 MAKERVERSION       := $(shell cd ${MAKERDIR} && git log -1 --format="%h [%ci]")
 
+PKGBUILDFLAGSFILE  := /tmp/${PKG}.buildflags
+
 ## user variables
 WARNINGS_AS_ERRORS := 1
 VIG                := 1
@@ -52,9 +54,9 @@ ifeq (${BIOC},1)
 endif
 
 .PHONEY: build vignettes check check-only bioccheck bioccheck-only \
-	check-downstream check-reverse-dependencies clean clean-all	\
-	clean-tar help install install-only install-dependencies \
-	install-upstream maker .maker remove release roxygen rd run-demos \
+	check-downstream check-reverse-dependencies clean clean-all clean-tar \
+	force help install install-only install-dependencies install-upstream \
+	maker .maker remove release roxygen rd run-demos \
 	targets tests usage win-builder version
 
 help targets usage:
@@ -115,9 +117,15 @@ help targets usage:
 	@echo " ${MAKERVERSION}"
 	@echo ""
 
+## pseudo target to force evaluation of other targets, e.g. ${PKGBUILDFLAGSFILE}
+force:
+
+${PKGBUILDFLAGSFILE}: force
+	echo "${VIG}" | cmp --silent - $@ || echo "${VIG}" > $@
+
 build: clean ${TARGZ}
 
-${TARGZ}: ${PKGFILES}
+${TARGZ}: ${PKGFILES} ${PKGBUILDFLAGSFILE}
 	${R} CMD build ${BUILDARGS} ${PKG} | \
 	COLOURS=$(COLOURS) ${INCLUDEDIR}/color-output.sh
 
