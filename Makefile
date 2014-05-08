@@ -57,7 +57,7 @@ endif
 	check-downstream check-reverse-dependencies clean clean-all clean-tar \
 	force help install install-only install-dependencies install-upstream \
 	maker .maker remove release roxygen rd run-demos \
-	targets tests usage win-builder version
+	targets usage win-builder version
 
 help targets usage:
 	@echo "Usage:"
@@ -92,7 +92,6 @@ help targets usage:
 	@echo " rd                          - roxygenize rd rocklet"
 	@echo " run-demos                   - source and run demo/*.R files"
 	@echo " targets                     - show this usage output"
-	@echo " tests                       - run unit tests on installed package"
 	@echo " usage                       - show this usage output"
 	@echo " win-builder                 - build package and send to win-builder.r-project.org"
 	@echo ""
@@ -209,9 +208,6 @@ rd: clean
 
 run-demos:
 	cd ${PKG} && ${RSCRIPT} ${INCLUDEDIR}/run-demos.R
-
-tests:
-	${R} -e "library('testthat'); test_package('"${PKG}"')"
 
 win-builder: check
 	ncftpput win-builder.r-project.org R-release ${TARGZ}
