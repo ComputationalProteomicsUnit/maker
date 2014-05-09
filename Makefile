@@ -69,7 +69,7 @@ help targets usage:
 	@echo " build                       - build source package"
 	@echo " vignettes                   - build vignettes in ./\$${PKG}/vignettes"
 	@echo " check                       - build and check package"
-	@echo " check-only                  - check package"
+	@echo " check-only                  - check package and time checking"
 	@echo " bioccheck                   - build, check and BiocCheck package"
 	@echo " bioccheck-only              - BiocCheck package"
 	@echo " check-downstream            - check packages which depend on this package"
@@ -139,7 +139,7 @@ vignettes:
 check: | build check-only
 
 check-only:
-	${R} CMD check ${CHECKARGS} ${TARGZ} | \
+	time ${R} CMD check ${CHECKARGS} ${TARGZ} | \
 	COLOURS=$(COLOURS) ${INCLUDEDIR}/color-output.sh && \
 	grep "WARNING" ${PKG}.Rcheck/00check.log > /dev/null ; \
 	if [ $$? -eq 0 ] ; then exit ${WARNINGS_AS_ERRORS}; fi
