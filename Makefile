@@ -141,7 +141,7 @@ vignettes:
 check: | build check-only
 
 check-only:
-	time ${TIMEFORMAT} ${R} CMD check ${CHECKARGS} ${TARGZ} | \
+	{ time ${TIMEFORMAT} ${R} CMD check ${CHECKARGS} ${TARGZ} 2>&1; } | \
 	COLOURS=$(COLOURS) ${INCLUDEDIR}/color-output.sh && \
 	grep "WARNING" ${PKG}.Rcheck/00check.log > /dev/null ; \
 	if [ $$? -eq 0 ] ; then exit ${WARNINGS_AS_ERRORS}; fi
