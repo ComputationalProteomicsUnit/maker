@@ -33,7 +33,7 @@ CRAN               := 0
 BIOC               := $(shell grep -s "biocViews" ${PKG}/DESCRIPTION >/dev/null && echo 1 || echo 0)
 COLOURS            := 1
 RPROFILE           := ${INCLUDEDIR}/Rprofile
-TIMEFORMAT         := -f "time: %e"
+TIMEFORMAT         :=
 
 ## overwrite default variables by variables in ~/.makerrc
 ifneq ($(wildcard ~/.makerrc),)
@@ -107,7 +107,7 @@ help targets usage:
 	@echo " CRAN                        - check using --as-cran (default is 0)"
 	@echo " COLOURS                     - using colours for R CMD check results (default is 1)"
 	@echo " RPROFILE                    - path to .Rprofile (default is ${INCLUDEDIR}/Rprofile"
-	@echo " TIMEFORMAT                  - time format, see \"man time\" for details (default: -f \"time: %e\")"
+	@echo " TIMEFORMAT                  - time format (default: empty)"
 	@echo ""
 	@echo "Misc:"
 	@echo ""

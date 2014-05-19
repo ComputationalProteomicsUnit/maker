@@ -4,3 +4,6 @@
 VIG  := 0
 ## always use --as-cran
 CRAN := 1
+## specify output format for time (needs GNU time)
+## see "man time" for details
+# TIMEFORMAT := -f "time: %e"
