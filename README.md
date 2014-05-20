@@ -96,7 +96,7 @@ Version:
 
 To add new project specific target to `maker`, you could create a
 `makefiles` directory in your main `maker` directory (defined as
-`${MAKERDIR}`) and add the following to your `.makerrc` configuration
+`${MAKERDIR}`) and add the following to your `~/.makerrc` configuration
 file:
 
 	ADDMAKEFILESDIR := ${MAKERDIR}/makefiles/
