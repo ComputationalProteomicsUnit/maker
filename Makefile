@@ -106,7 +106,7 @@ help targets usage:
 	@echo " WARNINGS_AS_ERRORS          - fail on warnings (default is 1)"
 	@echo " CRAN                        - check using --as-cran (default is 0)"
 	@echo " COLOURS                     - using colours for R CMD check results (default is 1)"
-	@echo " RPROFILE                    - path to .Rprofile (default is ${INCLUDEDIR}/Rprofile"
+	@echo " RPROFILE                    - path to .Rprofile (default is ${INCLUDEDIR}/Rprofile)"
 	@echo " TIMEFORMAT                  - time format (default: empty)"
 	@echo ""
 	@echo "Misc:"
