@@ -34,8 +34,7 @@ symlinks and use it.
 ## Help
 
 ```sh
-$make help
-
+$ make help
 Usage:
 
  make TARGET PKG=package
@@ -45,7 +44,7 @@ Available targets:
  build                       - build source package
  vignettes                   - build vignettes in ./${PKG}/vignettes
  check                       - build and check package
- check-only                  - check package
+ check-only                  - check package and time checking
  bioccheck                   - build, check and BiocCheck package
  bioccheck-only              - BiocCheck package
  check-downstream            - check packages which depend on this package
@@ -68,7 +67,6 @@ Available targets:
  rd                          - roxygenize rd rocklet
  run-demos                   - source and run demo/*.R files
  targets                     - show this usage output
- tests                       - run unit tests on installed package
  usage                       - show this usage output
  win-builder                 - build package and send to win-builder.r-project.org
 
@@ -83,6 +81,7 @@ Available variables:
  CRAN                        - check using --as-cran (default is 0)
  COLOURS                     - using colours for R CMD check results (default is 1)
  RPROFILE                    - path to .Rprofile (default is /home/lgatto/dev/00_github/maker//include//Rprofile
+ TIMEFORMAT                  - time format (default: empty)
 
 Misc:
 
@@ -90,8 +89,20 @@ Misc:
 
 Version:
 
- a0edcf4 [2014-04-29 13:13:17 +0100]
+ 1733627 [2014-05-19 19:52:42 +0200]
 ```
+
+## Additional targets via external Makefile
+
+To add new project specific target to `maker`, you could create a
+`makefiles` directory in your main `maker` directory (defined as
+`${MAKERDIR}`) and add the following to your `.makerrc` configuration
+file:
+
+	ADDMAKEFILESDIR := ${MAKERDIR}/makefiles/
+	include ${ADDMAKEFILESDIR}/Makefile.*
+
+to automatically include new `Makefile`s. 
 
 ## Configuration
 
