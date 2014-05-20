@@ -102,7 +102,9 @@ file:
 	ADDMAKEFILESDIR := ${MAKERDIR}/makefiles/
 	include ${ADDMAKEFILESDIR}/Makefile.*
 
-to automatically include new `Makefile`s. 
+to automatically include new Makefiles. See
+[issue 8](https://github.com/ComputationalProteomicsUnit/maker/issues/8)
+for a short discussion and an example.
 
 ## Configuration
 
