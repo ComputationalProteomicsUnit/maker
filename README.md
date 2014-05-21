@@ -80,7 +80,7 @@ Available variables:
  WARNINGS_AS_ERRORS          - fail on warnings (default is 1)
  CRAN                        - check using --as-cran (default is 0)
  COLOURS                     - using colours for R CMD check results (default is 1)
- RPROFILE                    - path to .Rprofile (default is /home/lgatto/dev/00_github/maker//include//Rprofile
+ RPROFILE                    - path to .Rprofile (default is ${INCLUDEDIR}/Rprofile)
  TIMEFORMAT                  - time format (default: empty)
 
 Misc:
