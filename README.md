@@ -81,6 +81,7 @@ Available variables:
  CRAN                        - check using --as-cran (default is 0)
  COLOURS                     - using colours for R CMD check results (default is 1)
  RPROFILE                    - path to .Rprofile (default is ${INCLUDEDIR}/Rprofile)
+
  TIMEFORMAT                  - time format (default: empty)
 
 Misc:
@@ -96,7 +97,7 @@ Version:
 
 To add new project specific target to `maker`, you could create a
 `makefiles` directory in your main `maker` directory (defined as
-`${MAKERDIR}`) and add the following to your `.makerrc` configuration
+`${MAKERDIR}`) and add the following to your `~/.makerrc` configuration
 file:
 
 	ADDMAKEFILESDIR := ${MAKERDIR}/makefiles/
