@@ -81,7 +81,6 @@ Available variables:
  CRAN                        - check using --as-cran (default is 0)
  COLOURS                     - using colours for R CMD check results (default is 1)
  RPROFILE                    - path to .Rprofile (default is ${INCLUDEDIR}/Rprofile)
-
  TIMEFORMAT                  - time format (default: empty)
 
 Misc:
