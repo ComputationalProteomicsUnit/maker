@@ -134,7 +134,7 @@ vignettes:
 	cd ${PKG}/vignettes/ && \
 		test -f Makefile && \
 		make all || \
-		( for v in `ls *.Rnw`; do \
+		( for v in `ls *.Rnw *Rmd`; do \
 				${R} CMD Sweave --engine=knitr::knitr --pdf $$v; \
 			done )
 
