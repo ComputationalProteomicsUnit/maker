@@ -56,7 +56,7 @@ endif
 
 .PHONEY: build vignettes check check-only bioccheck bioccheck-only \
 	check-downstream check-reverse-dependencies clean clean-all clean-tar \
-	force help install install-only install-dependencies install-upstream \
+	compile-attributes force help install install-only install-dependencies install-upstream \
 	maker .maker remove release roxygen rd run-demos \
 	targets usage win-builder version
 
@@ -79,6 +79,7 @@ help targets usage:
 	@echo " clean-tar                   - remove .tar.gz archive"
 	@echo " clean-vignettes             - remove vignettes in inst/doc/"
 	@echo " clean-all                   - combine \"clean\" and \"clean-all\""
+	@echo " compile-attributes          - Rcpp::compileAttributes"
 	@echo " help                        - show this usage output"
 	@echo " increment-version-major     - increment major version number (X++.1)"
 	@echo " increment-version-minor     - increment minor version number (1.X++)"
@@ -175,6 +176,9 @@ clean-vignettes:
 	    ${RM} ${PKG}/vignettes/.build.timestamp )
 
 clean-all: clean clean-tar clean-vignettes
+
+compile-attributes:
+	${R} -e "library(Rcpp); compileAttributes('"$(PKG)"')";
 
 increment-version-major:
 	@cd ${PKG} && ${RSCRIPT} ${INCLUDEDIR}/increment-version.R major
