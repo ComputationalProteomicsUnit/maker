@@ -79,7 +79,7 @@ help targets usage:
 	@echo " clean-tar                   - remove .tar.gz archive"
 	@echo " clean-vignettes             - remove vignettes in inst/doc/"
 	@echo " clean-all                   - combine \"clean\" and \"clean-all\""
-	@echo " compile-attributes          - Rcpp::compileAttributes"
+	@echo " compile-attributes          - run Rcpp::compileAttributes()"
 	@echo " help                        - show this usage output"
 	@echo " increment-version-major     - increment major version number (X++.1)"
 	@echo " increment-version-minor     - increment minor version number (1.X++)"
