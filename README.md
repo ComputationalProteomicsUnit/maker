@@ -53,6 +53,7 @@ Available targets:
  clean-tar                   - remove .tar.gz archive
  clean-vignettes             - remove vignettes in inst/doc/
  clean-all                   - combine "clean" and "clean-all"
+ compile-attributes          - run Rcpp::compileAttributes()
  help                        - show this usage output
  increment-version-major     - increment major version number (X++.1)
  increment-version-minor     - increment minor version number (1.X++)
