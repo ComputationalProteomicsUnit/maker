@@ -42,7 +42,7 @@ endif
 
 ifeq (${VIG},1)
   BUILDARGS := $(filter-out --no-build-vignettes,$(BUILDARGS))
-  CHECKARGS := $(filter-out --no-vignettes --no-build-vignettes,$(CHECKARGS))
+  CHECKARGS := $(filter-out --no-vignettes,$(CHECKARGS))
 endif
 
 ifeq (${CRAN},1)
