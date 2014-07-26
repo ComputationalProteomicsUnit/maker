@@ -122,5 +122,9 @@ VIG  := 0
 CRAN := 1
 ```
 
-The `~/.makerrc` is a Makefile as well. So you can use every supported
-Makefile command.
+The `~/.makerrc` file is a Makefile as well. So you can use every
+supported Makefile command.
+
+See the
+[`Setting R_HOME`](https://github.com/ComputationalProteomicsUnit/maker/issues/11)
+issue to use multiple `R` installations with `maker`.
