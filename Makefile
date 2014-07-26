@@ -5,8 +5,8 @@ ifeq (${R_HOME},)
   R_HOME = $(shell R RHOME)
 endif
 
-R                  := "$(R_HOME)/bin/R"
-RSCRIPT            := "$(R_HOME)/bin/Rscript"
+R                  = "$(R_HOME)/bin/R"
+RSCRIPT            = "$(R_HOME)/bin/Rscript"
 RM                 := rm -rf
 PKG                := maker## default package (there must be no whitespace behind the PKG name)
 VERSION            := $(shell grep -s Version ${PKG}/DESCRIPTION | sed -e 's/Version: //')
