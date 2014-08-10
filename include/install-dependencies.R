@@ -15,5 +15,8 @@ install <- is.na(deps$installed) |
            (!is.na(deps$version) &&
             package_version(deps$version) > package_version(deps$installed))
 
-if (any(install))
-  install.packages(deps$name[install])
+if (any(install)) {
+  source("http://bioconductor.org/biocLite.R")
+  biocLite(deps$name[install], ask = FALSE)
+}
+
