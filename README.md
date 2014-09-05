@@ -128,3 +128,7 @@ supported Makefile command.
 See the
 [`Setting R_HOME`](https://github.com/ComputationalProteomicsUnit/maker/issues/11)
 issue to use multiple `R` installations with `maker`.
+
+## More recipes
+
+See the [`RECIPES.md`](RECIPES.md) file for additional/contributed recipes. 
