@@ -42,7 +42,7 @@ MAKER_PAGER := less
 ASPELL_MASTER_DICT := en_US
 ASPELL_EXTRA_DICT := en_GB
 ASPELL_COMMAND_PRE := ${R} --vanilla --quiet -e "library(tools); 
-ASPELL_COMMAND_POST := ('"$(PKGDIR)"', control = c('--master="$(ASPELL_MASTER_DICT)"', '--add-extra-dicts="$(ASPELL_EXTRA_DICT)"'), dictionaries = Sys.glob(file.path(R.home('share'), 'dictionaries', '*.rds')))" 
+ASPELL_COMMAND_POST := ('"$(PKG)"', control = c('--master="$(ASPELL_MASTER_DICT)"', '--add-extra-dicts="$(ASPELL_EXTRA_DICT)"'), dictionaries = Sys.glob(file.path(R.home('share'), 'dictionaries', '*.rds')))" 
 ASPELL_RD_FUN := aspell_package_Rd_files
 ASPELL_VIGNETTE_FUN := aspell_package_vignettes
 ASPELL_C_FUN := aspell_package_C_files
@@ -124,18 +124,18 @@ check-codetools:
 # - - - - -
 
 document: clean
-	${R} -e "library(devtools); document('"$(PKGDIR)"')";
+	${R} -e "library(devtools); document('"$(PKG)"')";
 document-rd: clean
-	${R} -e "library(devtools); document('"$(PKGDIR)"', roclets='rd')";
+	${R} -e "library(devtools); document('"$(PKG)"', roclets='rd')";
 document-clean: clean
-	${R} -e "library(devtools); document('"$(PKGDIR)"', clean=TRUE)";
+	${R} -e "library(devtools); document('"$(PKG)"', clean=TRUE)";
 document-rd-clean: clean
-	${R} -e "library(devtools); document('"$(PKGDIR)"', roclets='rd', clean=TRUE)";
+	${R} -e "library(devtools); document('"$(PKG)"', roclets='rd', clean=TRUE)";
 
 roxygen-clean: clean
-	${R} -e "library(roxygen2); roxygenize('"$(PKGDIR)"', clean=TRUE)";
+	${R} -e "library(roxygen2); roxygenize('"$(PKG)"', clean=TRUE)";
 roxygen-rd-clean: clean
-	${R} -e "library(roxygen2); roxygenize('"$(PKGDIR)"', roclets='rd', clean=TRUE)";
+	${R} -e "library(roxygen2); roxygenize('"$(PKG)"', roclets='rd', clean=TRUE)";
 
 ```
 
@@ -158,18 +158,18 @@ GITHUB_USER := yourUsernameHere#
 # - - - - -
 
 .travis:
-	wget https://raw.githubusercontent.com/craigcitro/r-travis/master/sample.travis.yml -O  $(PKGDIR)/.travis.yml
+	wget https://raw.githubusercontent.com/craigcitro/r-travis/master/sample.travis.yml -O  $(PKG)/.travis.yml
 
 ci-add-travis: .travis
-	echo "[![Build Status](https://travis-ci.org/$(GITHUB_USER)/$(PKG).svg)](https://travis-ci.org/$(GITHUB_USER)/$(PKG))" >> $(PKGDIR)/README.md
-	echo '^\.travis\.yml' >> $(PKGDIR)/.Rbuildignore
+	echo "[![Build Status](https://travis-ci.org/$(GITHUB_USER)/$(PKG).svg)](https://travis-ci.org/$(GITHUB_USER)/$(PKG))" >> $(PKG)/README.md
+	echo '^\.travis\.yml' >> $(PKG)/.Rbuildignore
 
 .appveyor:
-	wget https://raw.githubusercontent.com/krlmlr/r-appveyor/master/sample.appveyor.yml -O  $(PKGDIR)/appveyor.yml
-	wget https://raw.githubusercontent.com/krlmlr/r-appveyor/master/.gitattributes -O  $(PKGDIR)/.gitattributes
+	wget https://raw.githubusercontent.com/krlmlr/r-appveyor/master/sample.appveyor.yml -O  $(PKG)/appveyor.yml
+	wget https://raw.githubusercontent.com/krlmlr/r-appveyor/master/.gitattributes -O  $(PKG)/.gitattributes
 
 ci-add-appveyor: .appveyor
-	echo '^appveyor\.yml' >> $(PKGDIR)/.Rbuildignore
+	echo '^appveyor\.yml' >> $(PKG)/.Rbuildignore
 	@ echo ;
 	@ echo "   Now you can add a badge to your README.md  " ;
 	@ echo "   Go to https://ci.appveyor.com/project/$(GITHUB_USER)/$(PKG)/settings/badges  " ;
