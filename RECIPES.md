@@ -27,8 +27,8 @@ We can use `tools::aspell_*` functions; in what follows we assume
 
 Main targets are `aspell-rd`, `aspell-vignette`, `aspell-r` and `aspell-c`:
 they provide access to `aspell_package_Rd_files`,
-`aspell_package_vignettes`, `aspell_package_C_files` and
-`aspell_package_R_files` respectively.  A pager is used to display aspell
+`aspell_package_vignettes`, `aspell_package_R_files` and
+`aspell_package_C_files`  respectively.  A pager is used to display aspell
 output.
 
 Finally `aspell-all` does all the checks.  
@@ -116,7 +116,7 @@ check-codetools:
 ### Further documenting targets
 
 `devtools::document` targets and `clean` option for both
-`roxygen::roxygenize` and `devtools::document` 
+`roxygen::roxygenize` and `devtools::document`.
 
 ``` Makefile
 # - - - - -
