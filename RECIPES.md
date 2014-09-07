@@ -109,7 +109,8 @@ check-codetools:
 
 
 ### Further documenting targets
-
+devtools::document targets and `clean` option for both
+`roxygen::roxygenize` and `devtools::document` 
 
 ``` Makefile
 # - - - - -
@@ -134,6 +135,10 @@ roxygen-rd-clean: clean
 
 
 ### Continuous Integration with GitHub
+`ci-add-travis` and `ci-add-appveyor` can be useful for adding continuous
+integration with [r-travis](https://github.com/craigcitro/r-travis) (unix
+building) and [r-appveyor](https://github.com/krlmlr/r-appveyor) (win
+building and deployment)
 
 ``` Makefile
 # - - - - -
