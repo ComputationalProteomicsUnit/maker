@@ -139,7 +139,8 @@ roxygen-rd-clean: clean
 # - - - - -
 # Variables
 # - - - - -
-GITHUB_USER := lbraglia
+
+GITHUB_USER := yourUsernameHere#
 
 # - - - - -
 # Targets
