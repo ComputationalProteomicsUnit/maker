@@ -26,7 +26,7 @@ We can use `tools::aspell_*` functions; in what follows we assume
 [aspell](http://aspell.net) to be installed. 
 
 Main targets are `aspell-rd`, `aspell-vignette`, `aspell-r` and `aspell-c`:
-they provide access to to `aspell_package_Rd_files`,
+they provide access to `aspell_package_Rd_files`,
 `aspell_package_vignettes`, `aspell_package_C_files` and
 `aspell_package_R_files` respectively.  A pager is used to display aspell
 output.
@@ -82,17 +82,18 @@ aspell-all:
 
 ### `codetools` check
 
-`check-codetools` target check the package with `codetools::checkUsage`
-too. This implement a check with the most rigorous functions code analysis
+`check-codetools` target checks the package with `codetools::checkUsage`
+too. It's a check with the most rigorous functions code analysis
 (a NOTE is risen, false positive are possible, but can be anyhow useful).
 
-The user can set different options (variable `CODETOOLS_OPTION` to choose
-what to check) as a comma separated value pairs (eg `a=TRUE, b=FALSE`, more
+The user can set different options (variable `CODETOOLS_OPTION`) to choose
+what to check as a comma separated value pairs (eg `a=TRUE, b=FALSE`, more
 info
 [here](http://cran.r-project.org/doc/manuals/r-release/R-ints.html#Tools)
-and [here](http://stackoverflow.com/questions/10017702/)). By default,
-below all checks are performed. If the user set up `~/.R/check.Renviron`
-`CODETOOLS_OPTION` is ignored.
+and [here](http://stackoverflow.com/questions/10017702/)).
+
+By default, below all checks are performed. If the user set up
+`~/.R/check.Renviron` `CODETOOLS_OPTION` is ignored.
 
 
 ``` Makefile
@@ -140,10 +141,10 @@ roxygen-rd-clean: clean
 
 
 ### Continuous Integration with GitHub
+
 `ci-add-travis` and `ci-add-appveyor` can be useful for adding continuous
-integration with [r-travis](https://github.com/craigcitro/r-travis) (Unix
-building) and [r-appveyor](https://github.com/krlmlr/r-appveyor) (Win
-building and deployment).
+integration with [r-travis](https://github.com/craigcitro/r-travis) and
+[r-appveyor](https://github.com/krlmlr/r-appveyor).
 
 ``` Makefile
 # - - - - -
