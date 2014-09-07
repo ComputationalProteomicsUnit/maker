@@ -22,13 +22,16 @@ into your `.makerrc` file or add new targets as described in the
 
 ### Spell check
 
-To check spell we can use `tools::aspell_*` functions. In what follows we
-assume aspell to be installed. Main targets are `aspell-rd`,
-`aspell-vignette`, `aspell-r` and `aspell-c`: they provide access to
-to `aspell_package_Rd_files`, `aspell_package_vignettes`,
-`aspell_package_C_files` and `aspell_package_R_files` respectively.
-Finally `aspell-all` do all the checks.
-A pager is used to display aspell output.
+We can use `tools::aspell_*` functions; in what follows we assume
+[aspell](http://aspell.net) to be installed. 
+
+Main targets are `aspell-rd`, `aspell-vignette`, `aspell-r` and `aspell-c`:
+they provide access to to `aspell_package_Rd_files`,
+`aspell_package_vignettes`, `aspell_package_C_files` and
+`aspell_package_R_files` respectively.  A pager is used to display aspell
+output.
+
+Finally `aspell-all` does all the checks.  
 
 ```Makefile
 # - - - - -
@@ -82,8 +85,9 @@ aspell-all:
 `check-codetools` target check the package with `codetools::checkUsage`
 too. This implement a check with the most rigorous functions code analysis
 (a NOTE is risen, false positive are possible, but can be anyhow useful).
+
 The user can set different options (variable `CODETOOLS_OPTION` to choose
-what to check) as a comma separated value pairs (eg 'a=TRUE, b=FALSE', more
+what to check) as a comma separated value pairs (eg `a=TRUE, b=FALSE`, more
 info
 [here](http://cran.r-project.org/doc/manuals/r-release/R-ints.html#Tools)
 and [here](http://stackoverflow.com/questions/10017702/)). By default,
@@ -109,7 +113,8 @@ check-codetools:
 
 
 ### Further documenting targets
-devtools::document targets and `clean` option for both
+
+`devtools::document` targets and `clean` option for both
 `roxygen::roxygenize` and `devtools::document` 
 
 ``` Makefile
@@ -136,9 +141,9 @@ roxygen-rd-clean: clean
 
 ### Continuous Integration with GitHub
 `ci-add-travis` and `ci-add-appveyor` can be useful for adding continuous
-integration with [r-travis](https://github.com/craigcitro/r-travis) (unix
-building) and [r-appveyor](https://github.com/krlmlr/r-appveyor) (win
-building and deployment)
+integration with [r-travis](https://github.com/craigcitro/r-travis) (Unix
+building) and [r-appveyor](https://github.com/krlmlr/r-appveyor) (Win
+building and deployment).
 
 ``` Makefile
 # - - - - -
