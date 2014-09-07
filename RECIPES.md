@@ -1,6 +1,6 @@
 # More `maker` recipes
 
-To use any of these contributed reciepes, copy the relevant chunks
+To use any of these contributed recipes, copy the relevant chunks
 into your `.makerrc` file or add new targets as described in the
 `README.md` file.
 
