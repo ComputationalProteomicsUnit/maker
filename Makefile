@@ -35,6 +35,8 @@ COLOURS            := 1
 RPROFILE           := ${INCLUDEDIR}/Rprofile
 TIMEFORMAT         :=
 
+.DEFAULT_GOAL:= help
+
 ## overwrite default variables by variables in ~/.makerrc
 ifneq ($(wildcard ~/.makerrc),)
   include ~/.makerrc
