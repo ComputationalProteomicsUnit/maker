@@ -77,6 +77,7 @@ Available targets:
 Available variables:
 
  PKG                         - name of the target package (default is maker)
+ PKGDIR                      - directory of the package (default is ./\${PKG}/)
  VIG                         - should vignettes be build (default is 1). If 0, build --no-build-vignettes is used
  WARNINGS_AS_ERRORS          - fail on warnings (default is 1)
  CRAN                        - check using --as-cran (default is 0)
@@ -131,4 +132,4 @@ issue to use multiple `R` installations with `maker`.
 
 ## More recipes
 
-See the [`RECIPES.md`](RECIPES.md) file for additional/contributed recipes. 
+See the [`RECIPES.md`](RECIPES.md) file for additional/contributed recipes.

@@ -9,19 +9,20 @@ R                  = "$(R_HOME)/bin/R"
 RSCRIPT            = "$(R_HOME)/bin/Rscript"
 RM                 := rm -rf
 PKG                := maker## default package (there must be no whitespace behind the PKG name)
-VERSION            := $(shell grep -s Version ${PKG}/DESCRIPTION | sed -e 's/Version: //')
-TARGZ              := ${PKG}_${VERSION}.tar.gz
+PKGDIR             = ${PKG}/
+VERSION            = $(shell grep -s Version ${PKGDIR}/DESCRIPTION | sed -e 's/Version: //')
+TARGZ              = ${PKG}_${VERSION}.tar.gz
 BUILDARGS          := --no-build-vignettes
 CHECKARGS          := --no-vignettes --no-build-vignettes
 RELEASERARGS       := --no-save --no-restore --no-site-file --no-environ# --vanilla-=--no-init-file
 RELEASETARGETS     := | clean-all build check-only
 INSTALLARGS        := --install-tests
 IGNORE             := ".git/* .svn/* sandbox/*"
-IGNOREPATTERN      := $(shell echo "${IGNORE}" | sed 's:\([^[:space:]]\+\):-a -not -path "${PKG}/\1":g; s:^-a \+::')
+IGNOREPATTERN      = $(shell echo "${IGNORE}" | sed 's:\([^[:space:]]\+\):-a -not -path "${PKGDIR}/\1":g; s:^-a \+::')
 MAKERDIR           := $(dir $(realpath $(lastword $(MAKEFILE_LIST))))
 INCLUDEDIR         := ${MAKERDIR}/include/
-PKGFILES           := $(shell find ${PKG} -type f \( ${IGNOREPATTERN} \) 2>/dev/null)
-VIGFILES           := $(shell find ${PKG} -type f -name *.Rnw 2>/dev/null)
+PKGFILES           = $(shell find ${PKGDIR} -type f \( ${IGNOREPATTERN} \) 2>/dev/null)
+VIGFILES           = $(shell find ${PKGDIR} -type f -name *.Rnw 2>/dev/null)
 MAKERVERSION       := $(shell cd ${MAKERDIR} && git log -1 --format="%h [%ci]")
 
 PKGBUILDFLAGSFILE  := /tmp/${PKG}.buildflags
@@ -30,7 +31,7 @@ PKGBUILDFLAGSFILE  := /tmp/${PKG}.buildflags
 WARNINGS_AS_ERRORS := 1
 VIG                := 1
 CRAN               := 0
-BIOC               := $(shell grep -s "biocViews" ${PKG}/DESCRIPTION >/dev/null && echo 1 || echo 0)
+BIOC               = $(shell grep -s "biocViews" ${PKGDIR}/DESCRIPTION >/dev/null && echo 1 || echo 0)
 COLOURS            := 1
 RPROFILE           := ${INCLUDEDIR}/Rprofile
 TIMEFORMAT         :=
@@ -70,7 +71,7 @@ help targets usage:
 	@echo "Available targets:"
 	@echo ""
 	@echo " build                       - build source package"
-	@echo " vignettes                   - build vignettes in ./\$${PKG}/vignettes"
+	@echo " vignettes                   - build vignettes in ./\$${PKGDIR}/vignettes"
 	@echo " check                       - build and check package"
 	@echo " check-only                  - check package and time checking"
 	@echo " bioccheck                   - build, check and BiocCheck package"
@@ -105,6 +106,7 @@ help targets usage:
 	@echo "Available variables:"
 	@echo ""
 	@echo " PKG                         - name of the target package (default is maker)"
+	@echo " PKGDIR                      - directory of the package (default is ./\$${PKG}/)"
 	@echo " VIG                         - should vignettes be build (default is 1). If 0, build --no-build-vignettes is used"
 	@echo " WARNINGS_AS_ERRORS          - fail on warnings (default is 1)"
 	@echo " CRAN                        - check using --as-cran (default is 0)"
@@ -130,11 +132,11 @@ ${PKGBUILDFLAGSFILE}: force
 build: clean ${TARGZ}
 
 ${TARGZ}: ${PKGFILES} ${PKGBUILDFLAGSFILE}
-	${R} CMD build ${BUILDARGS} ${PKG} | \
+	${R} CMD build ${BUILDARGS} ${PKGDIR} | \
 	COLOURS=$(COLOURS) ${INCLUDEDIR}/color-output.sh
 
 vignettes:
-	cd ${PKG}/vignettes/ && \
+	cd ${PKGDIR}/vignettes/ && \
 		test -f Makefile && \
 		make all || \
 		( for v in `ls *.Rnw *Rmd`; do \
@@ -158,38 +160,38 @@ bioccheck-only:
 	if [ $$? -eq 0 ] ; then exit ${WARNINGS_AS_ERRORS}; fi
 
 check-reverse-dependencies check-downstream: install
-	cd ${PKG} && ${RSCRIPT} ${INCLUDEDIR}/check-reverse-dependencies.R
+	cd ${PKGDIR} && ${RSCRIPT} ${INCLUDEDIR}/check-reverse-dependencies.R
 
 clean:
-	${RM} ${PKG}/src/*.o ${PKG}/src/*.so
-	${RM} ${PKG}.Rcheck
-	${RM} ${PKG}/*~
+	${RM} ${PKGDIR}/src/*.o ${PKG}/src/*.so
+	${RM} ${PKGDIR}/*~
 	find . -name '.Rhistory' -exec rm '{}' \;
-	${RM} ${PKG}/vignettes/.\#*
-	${RM} ${PKG}/vignettes/\#*
+	${RM} ${PKGDIR}/vignettes/.\#*
+	${RM} ${PKGDIR}/vignettes/\#*
+	${RM} ${PKG}.Rcheck
 
 clean-tar:
 	${RM} ${TARGZ}
 
 clean-vignettes:
-	test -f ${PKG}/vignettes/Makefile && \
-		(cd ${PKG}/vignettes/ && make clean) || \
+	test -f ${PKGDIR}/vignettes/Makefile && \
+		(cd ${PKGDIR}/vignettes/ && make clean) || \
 		( ${RM} $(VIGFILES:.Rnw=.pdf) && \
-	    ${RM} ${PKG}/vignettes/.build.timestamp )
+	    ${RM} ${PKGDIR}/vignettes/.build.timestamp )
 
 clean-all: clean clean-tar clean-vignettes
 
 compile-attributes:
-	${R} -e "library(Rcpp); compileAttributes('"$(PKG)"')";
+	${R} -e "library(Rcpp); compileAttributes('"$(PKGDIR)"')";
 
 increment-version-major:
-	@cd ${PKG} && ${RSCRIPT} ${INCLUDEDIR}/increment-version.R major
+	@cd ${PKGDIR} && ${RSCRIPT} ${INCLUDEDIR}/increment-version.R major
 
 increment-version-minor:
-	@cd ${PKG} && ${RSCRIPT} ${INCLUDEDIR}/increment-version.R minor
+	@cd ${PKGDIR} && ${RSCRIPT} ${INCLUDEDIR}/increment-version.R minor
 
 increment-version-patch:
-	@cd ${PKG} && ${RSCRIPT} ${INCLUDEDIR}/increment-version.R patch
+	@cd ${PKGDIR} && ${RSCRIPT} ${INCLUDEDIR}/increment-version.R patch
 
 install: | build install-only
 
@@ -198,7 +200,7 @@ install-only:
 	COLOURS=$(COLOURS) ${INCLUDEDIR}/color-output.sh
 
 install-dependencies install-upstream:
-	cd ${PKG} && ${RSCRIPT} ${INCLUDEDIR}/install-dependencies.R
+	cd ${PKGDIR} && ${RSCRIPT} ${INCLUDEDIR}/install-dependencies.R
 
 release: R := R_PROFILE_USER=${RPROFILE} ${R} ${RELEASERARGS}
 release: CHECKARGS := ${RELEASECHECKARGS}
@@ -209,13 +211,13 @@ remove:
 	${R} CMD REMOVE ${PKG}
 
 roxygen: clean
-	${R} -e "library(roxygen2); roxygenize('"$(PKG)"')";
+	${R} -e "library(roxygen2); roxygenize('"$(PKGDIR)"')";
 
 rd: clean
-	${R} -e "library(roxygen2); roxygenize('"$(PKG)"', roclets=\"rd\")";
+	${R} -e "library(roxygen2); roxygenize('"$(PKGDIR)"', roclets=\"rd\")";
 
 run-demos:
-	cd ${PKG} && ${RSCRIPT} ${INCLUDEDIR}/run-demos.R
+	cd ${PKGDIR} && ${RSCRIPT} ${INCLUDEDIR}/run-demos.R
 
 win-builder: check
 	ncftpput win-builder.r-project.org R-release ${TARGZ}
