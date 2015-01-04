@@ -22,11 +22,16 @@ if (arg == "major") {
 
 dcf[, "Version"] <- paste(na.omit(version), collapse=".")
 
+curDate <- format(Sys.time(), "%Y-%m-%d")
+
 if ("Date" %in% colnames(dcf)) {
-  dcf[, "Date"] <- format(Sys.time(), "%Y-%m-%d")
+  dcf[, "Date"] <- curDate
+} else {
+  dcf <- cbind(dcf, Date=curDate)
 }
 
 write.dcf(dcf, "DESCRIPTION")
 
-message("New version of ", dcf[, "Package"], " is ", dcf[, "Version"])
+message("New version of ", dcf[, "Package"], " is ", dcf[, "Version"],
+        " (release date updated to ", dcf[, "Date"], ")")
 
