@@ -127,15 +127,6 @@ document: clean
 	${R} -e "library(devtools); document('"$(PKG)"')";
 document-rd: clean
 	${R} -e "library(devtools); document('"$(PKG)"', roclets='rd')";
-document-clean: clean
-	${R} -e "library(devtools); document('"$(PKG)"', clean=TRUE)";
-document-rd-clean: clean
-	${R} -e "library(devtools); document('"$(PKG)"', roclets='rd', clean=TRUE)";
-
-roxygen-clean: clean
-	${R} -e "library(roxygen2); roxygenize('"$(PKG)"', clean=TRUE)";
-roxygen-rd-clean: clean
-	${R} -e "library(roxygen2); roxygenize('"$(PKG)"', roclets='rd', clean=TRUE)";
 
 ```
 
