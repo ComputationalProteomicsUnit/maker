@@ -55,9 +55,9 @@ Available targets:
  clean-all                   - combine "clean", "clean-tar" and "clean-vignettes"
  compile-attributes          - run Rcpp::compileAttributes()
  help                        - show this usage output
- increment-version-major     - increment major version number (X++.1)
- increment-version-minor     - increment minor version number (1.X++)
- increment-version-patch     - increment patch version number (1.1.X++)
+ increment-version-major     - increment major version number (X++.1) and set the "Date" field in the DESCRIPTION file
+ increment-version-minor     - increment minor version number (1.X++) and set the "Date" field in the DESCRIPTION file
+ increment-version-patch     - increment patch version number (1.1.X++) and set the "Date" field in the DESCRIPTION file
  install                     - build and install package
  install-only                - install package
  install-dependencies        - install package dependencies
