@@ -98,6 +98,7 @@ help targets usage:
 	@echo " rd                          - roxygenize rd rocklet"
 	@echo " run-demos                   - source and run demo/*.R files"
 	@echo " targets                     - show this usage output"
+	@echo " update-date                 - set DESCRIPTION Date to Sys.Date (today)"
 	@echo " usage                       - show this usage output"
 	@echo " win-builder                 - build package and send to win-builder.r-project.org"
 	@echo ""
@@ -219,9 +220,11 @@ rd: clean
 run-demos:
 	cd ${PKGDIR} && ${RSCRIPT} ${INCLUDEDIR}/run-demos.R
 
+update-date:
+	@cd ${PKGDIR} && ${RSCRIPT} ${INCLUDEDIR}/update-date.R
+
 win-builder: check
 	ncftpput win-builder.r-project.org R-release ${TARGZ}
-
 
 maker: .maker
 

@@ -68,6 +68,7 @@ Available targets:
  rd                          - roxygenize rd rocklet
  run-demos                   - source and run demo/*.R files
  targets                     - show this usage output
+ update-date                 - set DESCRIPTION Date to Sys.Date (today)
  usage                       - show this usage output
  win-builder                 - build package and send to win-builder.r-project.org
 
