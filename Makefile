@@ -10,8 +10,9 @@ RSCRIPT            = "$(R_HOME)/bin/Rscript"
 RM                 := rm -rf
 PKG                := maker## default package (there must be no whitespace behind the PKG name)
 PKGDIR             = ${PKG}/
-VERSION            = $(shell grep -s Version ${PKGDIR}/DESCRIPTION | sed -e 's/Version: //')
-TARGZ              = ${PKG}_${VERSION}.tar.gz
+PKGNAME            = $(shell sed -n 's/Package: *//p' ${PKGDIR}/DESCRIPTION 2> /dev/null)
+VERSION            = $(shell sed -n 's/Version: *//p' ${PKGDIR}/DESCRIPTION 2> /dev/null)
+TARGZ              = ${PKGNAME}_${VERSION}.tar.gz
 BUILDARGS          := --no-build-vignettes
 CHECKARGS          := --no-vignettes --no-build-vignettes
 RELEASERARGS       := --no-save --no-restore --no-site-file --no-environ# --vanilla-=--no-init-file
@@ -25,7 +26,7 @@ PKGFILES           = $(shell find ${PKGDIR} -type f \( ${IGNOREPATTERN} \) 2>/de
 VIGFILES           = $(shell find ${PKGDIR} -type f -name *.Rnw 2>/dev/null)
 MAKERVERSION       := $(shell cd ${MAKERDIR} && git log -1 --format="%h [%ci]")
 
-PKGBUILDFLAGSFILE  := /tmp/${PKG}.buildflags
+PKGBUILDFLAGSFILE  := /tmp/${PKGNAME}.buildflags
 
 ## user variables
 WARNINGS_AS_ERRORS := 1
@@ -105,8 +106,7 @@ help targets usage:
 	@echo ""
 	@echo "Available variables:"
 	@echo ""
-	@echo " PKG                         - name of the target package (default is maker)"
-	@echo " PKGDIR                      - directory of the package (default is ./\$${PKG}/)"
+	@echo " PKG/PKGDIR                  - path to the target package (default is 'maker')"
 	@echo " VIG                         - should vignettes be build (default is 1). If 0, build --no-build-vignettes is used"
 	@echo " WARNINGS_AS_ERRORS          - fail on warnings (default is 1)"
 	@echo " CRAN                        - check using --as-cran (default is 0)"
@@ -148,7 +148,7 @@ check: | build check-only
 check-only:
 	{ time ${TIMEFORMAT} ${R} CMD check ${CHECKARGS} ${TARGZ} 2>&1; } | \
 	COLOURS=$(COLOURS) ${INCLUDEDIR}/color-output.sh && \
-	grep "WARNING" ${PKG}.Rcheck/00check.log > /dev/null ; \
+	grep "WARNING" ${PKGNAME}.Rcheck/00check.log > /dev/null ; \
 	if [ $$? -eq 0 ] ; then exit ${WARNINGS_AS_ERRORS}; fi
 
 bioccheck: | check bioccheck-only
@@ -156,19 +156,19 @@ bioccheck: | check bioccheck-only
 bioccheck-only:
 	${R} CMD BiocCheck ${TARGZ} 2>&1 | \
 	COLOURS=$(COLOURS) ${INCLUDEDIR}/color-output.sh && \
-	grep "WARNING" ${PKG}.Rcheck/00check.log > /dev/null ; \
+	grep "WARNING" ${PKGNAME}.Rcheck/00check.log > /dev/null ; \
 	if [ $$? -eq 0 ] ; then exit ${WARNINGS_AS_ERRORS}; fi
 
 check-reverse-dependencies check-downstream: install
 	cd ${PKGDIR} && ${RSCRIPT} ${INCLUDEDIR}/check-reverse-dependencies.R
 
 clean:
-	${RM} ${PKGDIR}/src/*.o ${PKG}/src/*.so
+	${RM} ${PKGDIR}/src/*.o ${PKGNAME}/src/*.so
 	${RM} ${PKGDIR}/*~
 	find . -name '.Rhistory' -exec rm '{}' \;
 	${RM} ${PKGDIR}/vignettes/.\#*
 	${RM} ${PKGDIR}/vignettes/\#*
-	${RM} ${PKG}.Rcheck
+	${RM} ${PKGNAME}.Rcheck
 
 clean-tar:
 	${RM} ${TARGZ}
@@ -208,7 +208,7 @@ release: BUILDARGS := ${RELEASEBUILDARGS}
 release: ${RELEASETARGETS}
 
 remove:
-	${R} CMD REMOVE ${PKG}
+	${R} CMD REMOVE ${PKGNAME}
 
 roxygen: clean
 	${R} -e "library(roxygen2); roxygenize('"$(PKGDIR)"')";
