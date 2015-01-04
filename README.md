@@ -52,7 +52,7 @@ Available targets:
  clean                       - remove temporary files and .Rcheck
  clean-tar                   - remove .tar.gz archive
  clean-vignettes             - remove vignettes in inst/doc/
- clean-all                   - combine "clean" and "clean-all"
+ clean-all                   - combine "clean", "clean-tar" and "clean-vignettes"
  compile-attributes          - run Rcpp::compileAttributes()
  help                        - show this usage output
  increment-version-major     - increment major version number (X++.1)

@@ -81,7 +81,7 @@ help targets usage:
 	@echo " clean                       - remove temporary files and .Rcheck"
 	@echo " clean-tar                   - remove .tar.gz archive"
 	@echo " clean-vignettes             - remove vignettes in inst/doc/"
-	@echo " clean-all                   - combine \"clean\" and \"clean-all\""
+	@echo " clean-all                   - combine \"clean\", \"clean-tar\" and  \"clean-vignettes\""
 	@echo " compile-attributes          - run Rcpp::compileAttributes()"
 	@echo " help                        - show this usage output"
 	@echo " increment-version-major     - increment major version number (X++.1)"
