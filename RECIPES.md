@@ -133,7 +133,7 @@ lintr checks adherence to a given style, syntax errors and possible semantic iss
 # [15] "object_usage_linter"            "trailing_whitespace_linter"
 # [17] "trailing_blank_lines_linter"
 
-LINTR_LINTERS = default_linters[-12]# eg (my setting)
+LINTR_LINTERS = default_linters[-12]
 
 # - - - - -
 # Targets
