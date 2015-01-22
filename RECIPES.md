@@ -4,7 +4,6 @@ To use any of these contributed recipes, copy the relevant chunks
 into your `.makerrc` file or add new targets as described in the
 `README.md` file.
 
-
 <!-- 
 ### TemplateTitle
 
@@ -111,6 +110,40 @@ check-codetools:
 	export _R_CHECK_CODETOOLS_PROFILE_=$(CODETOOLS_OPTIONS) && make check PKG=$(PKG)
 
 ```
+
+### Lint with `lintr`
+lintr checks adherence to a given style, syntax errors and possible semantic issues
+
+``` Makefile
+# - - - - -
+# Variables
+# - - - - -
+# linters are passed as a list of functions; see ?linters for a
+# full list of default and available linters. Below (eg, my settings) i use
+# the default linters without object_camel_case_linter  
+
+# > names(default_linters) # (as of 2015-01-22)
+#  [1] "assignment_linter"              "single_quotes_linter"
+#  [3] "absolute_paths_linter"          "no_tab_linter"
+#  [5] "line_length_linter"             "commas_linter"
+#  [7] "infix_spaces_linter"            "spaces_left_parentheses_linter"
+#  [9] "spaces_inside_linter"           "open_curly_linter"
+# [11] "closed_curly_linter"            "object_camel_case_linter"
+# [13] "object_multiple_dots_linter"    "object_length_linter"
+# [15] "object_usage_linter"            "trailing_whitespace_linter"
+# [17] "trailing_blank_lines_linter"
+
+LINTR_LINTERS = default_linters[-12]# eg (my setting)
+
+# - - - - -
+# Targets
+# - - - - -
+
+lint:
+	${R} -e "library(lintr); lint_package('"$(PKGDIR)"', linters = $(LINTR_LINTERS), relative_path = FALSE)"
+
+```
+
 
 
 ### Further documenting targets
