@@ -45,6 +45,14 @@ ifneq ($(wildcard ${MAKERRC}),)
   include ${MAKERRC}
 endif
 
+## test whether PKGDIR is an R package
+## if not throw an error if the user ask for a PKG-specific target
+ifeq ($(wildcard ${PKGDIR}/DESCRIPTION),)
+	ifneq ($(filter-out help maker targets usage version,${MAKECMDGOALS}),)
+		$(error ${PKGDIR} seems to be no R package. Do you set PKG/PKGDIR?)
+	endif
+endif
+
 ifeq (${VIG},1)
   BUILDARGS := $(filter-out --no-build-vignettes,$(BUILDARGS))
   CHECKARGS := $(filter-out --no-vignettes,$(CHECKARGS))
