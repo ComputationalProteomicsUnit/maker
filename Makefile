@@ -29,6 +29,7 @@ MAKERVERSION       := $(shell cd ${MAKERDIR} && git log -1 --format="%h [%ci]")
 PKGBUILDFLAGSFILE  := /tmp/${PKGNAME}.buildflags
 
 ## user variables
+MAKERRC            := ~/.makerrc
 WARNINGS_AS_ERRORS := 1
 VIG                := 1
 CRAN               := 0
@@ -40,8 +41,8 @@ TIMEFORMAT         :=
 .DEFAULT_GOAL:= help
 
 ## overwrite default variables by variables in ~/.makerrc
-ifneq ($(wildcard ~/.makerrc),)
-  include ~/.makerrc
+ifneq ($(wildcard ${MAKERRC}),)
+  include ${MAKERRC}
 endif
 
 ifeq (${VIG},1)
@@ -107,6 +108,7 @@ help targets usage:
 	@echo "Available variables:"
 	@echo ""
 	@echo " PKG/PKGDIR                  - path to the target package (default is 'maker')"
+	@echo " MAKERRC                     - path to the maker configuration file (default is '~/maker')"
 	@echo " VIG                         - should vignettes be build (default is 1). If 0, build --no-build-vignettes is used"
 	@echo " WARNINGS_AS_ERRORS          - fail on warnings (default is 1)"
 	@echo " CRAN                        - check using --as-cran (default is 0)"
