@@ -48,7 +48,7 @@ endif
 ## test whether PKGDIR is an R package
 ## if not throw an error if the user ask for a PKG-specific target
 ifeq ($(wildcard ${PKGDIR}/DESCRIPTION),)
-ifneq ($(filter-out default-pkg help maker targets usage version,${MAKECMDGOALS}),)
+ifneq ($(filter-out get-default-pkg help maker targets usage version,${MAKECMDGOALS}),)
 $(error ${PKGDIR} seems to be no R package. Did you set PKG/PKGDIR?)
 endif
 endif
@@ -110,9 +110,9 @@ help targets usage:
 	@echo " usage                       - show this usage output"
 	@echo " win-builder                 - build package and send to win-builder.r-project.org"
 	@echo ""
-	@echo "default-pkg                 - print current default PKG"
-	@echo "set-default-pkg             - set new default PKG"
-	@echo "remove-default-pkg          - remove current default PKG"
+	@echo " get-default-pkg             - print current default PKG"
+	@echo " set-default-pkg             - set new default PKG"
+	@echo " remove-default-pkg          - remove current default PKG"
 	@echo ""
 	@echo " maker                       - updates maker toolbox"
 	@echo " version                     - prints latest git hash and date of maker"
@@ -137,7 +137,7 @@ help targets usage:
 	@echo " ${MAKERVERSION}"
 	@echo ""
 
-default-pkg:
+get-default-pkg:
 	@grep "^[[:space:]]*PKG[[:space:]]*=" ${MAKERRC} || echo "No default PKG set."
 
 remove-default-pkg:
