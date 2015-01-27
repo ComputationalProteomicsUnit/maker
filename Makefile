@@ -120,7 +120,7 @@ help targets usage:
 	@echo "Available variables:"
 	@echo ""
 	@echo " PKG/PKGDIR                  - path to the target package (default is 'maker')"
-	@echo " MAKERRC                     - path to the maker configuration file (default is '~/maker')"
+	@echo " MAKERRC                     - path to the maker configuration file (default is '${MAKERRC}')"
 	@echo " VIG                         - should vignettes be build (default is 1). If 0, build --no-build-vignettes is used"
 	@echo " WARNINGS_AS_ERRORS          - fail on warnings (default is 1)"
 	@echo " CRAN                        - check using --as-cran (default is 0)"
