@@ -42,7 +42,7 @@ Usage:
 Available targets:
 
  build                       - build source package
- vignettes                   - build vignettes in ./${PKG}/vignettes
+ vignettes                   - build vignettes in ./${PKGDIR}/vignettes
  check                       - build and check package
  check-only                  - check package and time checking
  bioccheck                   - build, check and BiocCheck package
@@ -52,7 +52,7 @@ Available targets:
  clean                       - remove temporary files and .Rcheck
  clean-tar                   - remove .tar.gz archive
  clean-vignettes             - remove vignettes in inst/doc/
- clean-all                   - combine "clean", "clean-tar" and "clean-vignettes"
+ clean-all                   - combine "clean", "clean-tar" and  "clean-vignettes"
  compile-attributes          - run Rcpp::compileAttributes()
  help                        - show this usage output
  increment-version-major     - increment major version number (X++.1) and set the "Date" field in the DESCRIPTION file
@@ -71,13 +71,17 @@ Available targets:
  usage                       - show this usage output
  win-builder                 - build package and send to win-builder.r-project.org
 
+ get-default-pkg             - print current default PKG
+ set-default-pkg             - set new default PKG
+ remove-default-pkg          - remove current default PKG
+
  maker                       - updates maker toolbox
  version                     - prints latest git hash and date of maker
 
 Available variables:
 
- PKG                         - name of the target package (default is maker)
- PKGDIR                      - directory of the package (default is ./\${PKG}/)
+ PKG/PKGDIR                  - path to the target package (default is 'maker')
+ MAKERRC                     - path to the maker configuration file (default is '~/.makerrc')
  VIG                         - should vignettes be build (default is 1). If 0, build --no-build-vignettes is used
  WARNINGS_AS_ERRORS          - fail on warnings (default is 1)
  CRAN                        - check using --as-cran (default is 0)
@@ -91,7 +95,7 @@ Misc:
 
 Version:
 
- 1733627 [2014-05-19 19:52:42 +0200]
+ 16780dc [2015-01-27 20:28:43 +0100]
 ```
 
 ## Additional targets via external Makefile
