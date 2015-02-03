@@ -145,6 +145,19 @@ lint:
 ```
 
 
+### Coverage report with `covr`
+
+``` Makefile
+
+# - - - - -
+# Targets
+# - - - - -
+covr:
+        ${R} -e "library(covr); package_coverage('"$(PKGDIR)"')"
+
+```
+
+
 
 ### Further documenting targets
 
