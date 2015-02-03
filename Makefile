@@ -25,6 +25,8 @@ INCLUDEDIR         := ${MAKERDIR}/include/
 PKGFILES           = $(shell find ${PKGDIR} -type f \( ${IGNOREPATTERN} \) 2>/dev/null)
 VIGFILES           = $(shell find ${PKGDIR} -type f -name *.Rnw 2>/dev/null)
 MAKERVERSION       := $(shell cd ${MAKERDIR} && git log -1 --format="%h [%ci]")
+## targets that don't need an R package (PKG could be empty)
+NONPKGTARGETS      := get-default-pkg help maker targets usage version
 
 PKGBUILDFLAGSFILE  := /tmp/${PKGNAME}.buildflags
 
@@ -38,7 +40,7 @@ COLOURS            := 1
 RPROFILE           := ${INCLUDEDIR}/Rprofile
 TIMEFORMAT         :=
 
-.DEFAULT_GOAL:= help
+.DEFAULT_GOAL := help
 
 ## overwrite default variables by variables in ~/.makerrc
 ifneq ($(wildcard ${MAKERRC}),)
@@ -48,7 +50,7 @@ endif
 ## test whether PKGDIR is an R package
 ## if not throw an error if the user ask for a PKG-specific target
 ifeq ($(wildcard ${PKGDIR}/DESCRIPTION),)
-ifneq ($(filter-out get-default-pkg help maker targets usage version,${MAKECMDGOALS}),)
+ifneq ($(filter-out ${NONPKGTARGETS},${MAKECMDGOALS}),)
 $(error ${PKGDIR} seems to be no R package. Did you set PKG/PKGDIR?)
 endif
 endif
