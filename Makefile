@@ -1,10 +1,7 @@
 ## ideas and most of the code stolen from https://github.com/tudo-r/makeR
 ## updated to be run outside of the package directory
 
-ifndef R_HOME
-  R_HOME = $(shell R RHOME)
-endif
-
+R_HOME             = "$(shell R RHOME)"
 R                  = "$(R_HOME)/bin/R"
 RSCRIPT            = "$(R_HOME)/bin/Rscript"
 RM                 := rm -rf
