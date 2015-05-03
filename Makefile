@@ -230,7 +230,8 @@ install-only:
 install-dependencies install-upstream:
 	cd ${PKGDIR} && ${RSCRIPT} ${INCLUDEDIR}/install-dependencies.R
 
-release: R := R_PROFILE_USER=${RPROFILE} ${R} ${RELEASERARGS}
+release: export R_PROFILE_USER=${RPROFILE}
+release: R := ${R} ${RELEASERARGS}
 release: CHECKARGS := ${RELEASECHECKARGS}
 release: BUILDARGS := ${RELEASEBUILDARGS}
 release: ${RELEASETARGETS}
