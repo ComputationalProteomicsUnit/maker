@@ -81,7 +81,7 @@ help targets usage:
 	@echo ""
 	@echo " build                       - build source package"
 	@echo " vignettes                   - build vignettes in ./\$${PKGDIR}/vignettes"
-	@echo " check                       - build and check package"
+	@echo " check                       - build and check package; the check will always use \"--no-vignettes\" because vignettes are checked by the build process before"
 	@echo " check-only                  - check package and time checking"
 	@echo " bioccheck                   - build, check and BiocCheck package"
 	@echo " bioccheck-only              - BiocCheck package"
@@ -171,6 +171,7 @@ vignettes:
 				${R} CMD Sweave --engine=knitr::knitr --pdf $$v; \
 			done )
 
+check: CHECKARGS := $(filter-out --no-vignettes,$(CHECKARGS))
 check: | build check-only
 
 check-only:

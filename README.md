@@ -43,7 +43,7 @@ Available targets:
 
  build                       - build source package
  vignettes                   - build vignettes in ./${PKGDIR}/vignettes
- check                       - build and check package
+ check                       - build and check package; the check will always use "--no-vignettes" because vignettes are checked by the build process before
  check-only                  - check package and time checking
  bioccheck                   - build, check and BiocCheck package
  bioccheck-only              - BiocCheck package
@@ -70,7 +70,6 @@ Available targets:
  targets                     - show this usage output
  usage                       - show this usage output
  win-builder                 - build package and send to win-builder.r-project.org
-
  get-default-pkg             - print current default PKG
  set-default-pkg             - set new default PKG
  remove-default-pkg          - remove current default PKG
@@ -95,7 +94,7 @@ Misc:
 
 Version:
 
- 16780dc [2015-01-27 20:28:43 +0100]
+ 333fea6 [2015-05-03 20:25:47 +0200]
 ```
 
 ## Additional targets via external Makefile
