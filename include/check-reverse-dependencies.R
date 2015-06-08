@@ -2,8 +2,7 @@
 
 library("devtools")
 
-pkg <- read.dcf("DESCRIPTION")[[1,"Package"]]
-res <- revdep_check(pkg)
+res <- revdep_check()
 l <- sapply(res, length)
 
 if (any(l != 0)) {
