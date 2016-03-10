@@ -3,7 +3,7 @@
 
 ## Documentation is done directly in the Makefile using roxygen2-like syntax.
 ## To document a target use #' directly after the target and it dependencies
-## (in the same line). USe @section to start a new section and @note to create
+## (in the same line). Use @section to start a new section and @note to create
 ## a new note in the help output.
 
 R_HOME             = "$(shell R RHOME)"
