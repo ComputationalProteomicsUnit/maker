@@ -4,7 +4,7 @@ To use any of these contributed recipes, copy the relevant chunks
 into your `.makerrc` file or add new targets as described in the
 `README.md` file.
 
-<!-- 
+<!--
 ### TemplateTitle
 
 ``` Makefile
@@ -19,10 +19,24 @@ into your `.makerrc` file or add new targets as described in the
 ```
 -->
 
+### R devel
+
+To switch easily between R stable and R devel you could use the following in
+your `.makerrc`:
+
+```Makefile
+ifeq (${DEV},1)
+  R_HOME := /opt/Rdevel
+endif
+```
+
+`make PKG=foo check` uses R stable and `make PKG=foo check DEV=1` R devel,
+respectively.
+
 ### Spell check
 
 We can use `tools::aspell_*` functions; in what follows we assume
-[aspell](http://aspell.net) to be installed. 
+[aspell](http://aspell.net) to be installed.
 
 Main targets are `aspell-rd`, `aspell-vignette`, `aspell-r` and `aspell-c`:
 they provide access to `aspell_package_Rd_files`,
@@ -30,7 +44,7 @@ they provide access to `aspell_package_Rd_files`,
 `aspell_package_C_files`  respectively.  A pager is used to display aspell
 output.
 
-Finally `aspell-all` does all the checks.  
+Finally `aspell-all` does all the checks.
 
 ```Makefile
 # - - - - -
@@ -40,8 +54,8 @@ Finally `aspell-all` does all the checks.
 MAKER_PAGER := less
 ASPELL_MASTER_DICT := en_US
 ASPELL_EXTRA_DICT := en_GB
-ASPELL_COMMAND_PRE := ${R} --vanilla --quiet -e "library(tools); 
-ASPELL_COMMAND_POST := ('"$(PKG)"', control = c('--master="$(ASPELL_MASTER_DICT)"', '--add-extra-dicts="$(ASPELL_EXTRA_DICT)"'), dictionaries = Sys.glob(file.path(R.home('share'), 'dictionaries', '*.rds')))" 
+ASPELL_COMMAND_PRE := ${R} --vanilla --quiet -e "library(tools);
+ASPELL_COMMAND_POST := ('"$(PKG)"', control = c('--master="$(ASPELL_MASTER_DICT)"', '--add-extra-dicts="$(ASPELL_EXTRA_DICT)"'), dictionaries = Sys.glob(file.path(R.home('share'), 'dictionaries', '*.rds')))"
 ASPELL_RD_FUN := aspell_package_Rd_files
 ASPELL_VIGNETTE_FUN := aspell_package_vignettes
 ASPELL_C_FUN := aspell_package_C_files
@@ -57,20 +71,20 @@ ASPELL_R_COMMAND := ${ASPELL_COMMAND_PRE}${ASPELL_R_FUN}${ASPELL_COMMAND_POST}
 
 .aspell-rd:
 	${ASPELL_RD_COMMAND}
-.aspell-vignette: 
+.aspell-vignette:
 	${ASPELL_VIGNETTE_COMMAND}
-.aspell-r: 
+.aspell-r:
 	${ASPELL_R_COMMAND}
-.aspell-c: 
+.aspell-c:
 	${ASPELL_C_COMMAND}
 
-aspell-rd: 
+aspell-rd:
 	make .aspell-rd | ${MAKER_PAGER}
-aspell-vignette: 
+aspell-vignette:
 	make .aspell-vignette | $(MAKER_PAGER)
-aspell-r: 
+aspell-r:
 	make .aspell-r | $(MAKER_PAGER)
-aspell-c: 
+aspell-c:
 	make .aspell-c | $(MAKER_PAGER)
 
 aspell-all:
@@ -106,7 +120,7 @@ CODETOOLS_OPTIONS := "all=TRUE"
 # Targets
 # - - - - -
 
-check-codetools: 
+check-codetools:
 	export _R_CHECK_CODETOOLS_PROFILE_=$(CODETOOLS_OPTIONS) && make check PKG=$(PKG)
 
 ```
@@ -120,7 +134,7 @@ lintr checks adherence to a given style, syntax errors and possible semantic iss
 # - - - - -
 # linters are passed as a list of functions; see ?linters for a
 # full list of default and available linters. Below (eg, my settings) i use
-# the default linters without object_camel_case_linter  
+# the default linters without object_camel_case_linter
 
 # > names(default_linters) # (as of 2015-01-22)
 #  [1] "assignment_linter"              "single_quotes_linter"
