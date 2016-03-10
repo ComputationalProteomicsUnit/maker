@@ -1,6 +1,11 @@
 ## ideas and most of the code stolen from https://github.com/tudo-r/makeR
 ## updated to be run outside of the package directory
 
+## Documentation is done directly in the Makefile using roxygen2-like syntax.
+## To document a target use #' directly after the target and it dependencies
+## (in the same line). USe @section to start a new section and @note to create
+## a new note in the help output.
+
 R_HOME             = "$(shell R RHOME)"
 R                  = "$(R_HOME)/bin/R"
 RSCRIPT            = "$(R_HOME)/bin/Rscript"
@@ -72,84 +77,9 @@ endif
 	maker .maker remove release roxygen rd run-demos \
 	targets usage win-builder version
 
-help targets usage:
-	@echo "Usage:"
-	@echo ""
-	@echo " make TARGET PKG=package"
-	@echo ""
-	@echo "Available targets:"
-	@echo ""
-	@echo " build                       - build source package"
-	@echo " vignettes                   - build vignettes in ./\$${PKGDIR}/vignettes"
-	@echo " check                       - build and check package; the check will always use \"--no-vignettes\" because vignettes are checked by the build process before"
-	@echo " check-only                  - check package and time checking"
-	@echo " bioccheck                   - build, check and BiocCheck package"
-	@echo " bioccheck-only              - BiocCheck package"
-	@echo " check-downstream            - check packages which depend on this package"
-	@echo " check-reverse-dependencies  - check packages which depend on this package"
-	@echo " clean                       - remove temporary files and .Rcheck"
-	@echo " clean-tar                   - remove .tar.gz archive"
-	@echo " clean-vignettes             - remove vignettes in inst/doc/"
-	@echo " clean-all                   - combine \"clean\", \"clean-tar\" and  \"clean-vignettes\""
-	@echo " compile-attributes          - run Rcpp::compileAttributes()"
-	@echo " help                        - show this usage output"
-	@echo " increment-version-major     - increment major version number (X++.1) and set the \"Date\" field in the DESCRIPTION file"
-	@echo " increment-version-minor     - increment minor version number (1.X++) and set the \"Date\" field in the DESCRIPTION file"
-	@echo " increment-version-patch     - increment patch version number (1.1.X++) and set the \"Date\" field in the DESCRIPTION file"
-	@echo " install                     - build and install package"
-	@echo " install-only                - install package"
-	@echo " install-dependencies        - install package dependencies"
-	@echo " install-upstream            - install package dependencies"
-	@echo " release                     - build package for Bioc/CRAN release (includes vignettes etc.)"
-	@echo " remove                      - remove package"
-	@echo " roxygen                     - roxygenize package"
-	@echo " rd                          - roxygenize rd rocklet"
-	@echo " run-demos                   - source and run demo/*.R files"
-	@echo " targets                     - show this usage output"
-	@echo " usage                       - show this usage output"
-	@echo " win-builder                 - build package and send to win-builder.r-project.org"
-	@echo ""
-	@echo " get-default-pkg             - print current default PKG"
-	@echo " set-default-pkg             - set new default PKG"
-	@echo " remove-default-pkg          - remove current default PKG"
-	@echo ""
-	@echo " maker                       - updates maker toolbox"
-	@echo " version                     - prints latest git hash and date of maker"
-	@echo ""
-	@echo "Available variables:"
-	@echo ""
-	@echo " PKG/PKGDIR                  - path to the target package (default is 'maker')"
-	@echo " MAKERRC                     - path to the maker configuration file (default is '${MAKERRC}')"
-	@echo " VIG                         - should vignettes be build (default is 1). If 0, build --no-build-vignettes is used"
-	@echo " WARNINGS_AS_ERRORS          - fail on warnings (default is 1)"
-	@echo " CRAN                        - check using --as-cran (default is 0)"
-	@echo " COLOURS                     - using colours for R CMD check results (default is 1)"
-	@echo " RPROFILE                    - path to .Rprofile (default is ${INCLUDEDIR}/Rprofile)"
-	@echo " TIMEFORMAT                  - time format (default: empty)"
-	@echo ""
-	@echo "Misc:"
-	@echo ""
-	@echo " Vignettes are not build when checking: R CMD check --no-build-vignettes"
-	@echo ""
-	@echo "Version:"
-	@echo ""
-	@echo " ${MAKERVERSION}"
-	@echo ""
-
-get-default-pkg:
-	@grep "^[[:space:]]*PKG[[:space:]]*=" ${MAKERRC} || echo "No default PKG set."
-
-remove-default-pkg:
-	(test -f ${MAKERRC} && \
-	sed -i --follow-symlinks '/^[[:space:]]*PKG[[:space:]]*=.*/d' ${MAKERRC})
-
-set-default-pkg:
-	(test -f ${MAKERRC} && \
-	grep -q "^[[:space:]]*PKG[[:space:]]*=" ${MAKERRC} && \
-	sed -i --follow-symlinks 's#^[[:space:]]*PKG[[:space:]]*=.*#PKG=${PKG}#' ${MAKERRC}) || \
-	(echo PKG=${PKG} >> ${MAKERRC})
-	@echo
-	@echo "Default PKG set to ${PKG}."
+#'@section Usage
+#'@note make TARGET PKG=package
+#'@note   e.g. make build PKG=MSnbase
 
 ## pseudo target to force evaluation of other targets, e.g. ${PKGBUILDFLAGSFILE}
 force:
@@ -157,13 +87,14 @@ force:
 ${PKGBUILDFLAGSFILE}: force
 	echo "${VIG}" | cmp --silent - $@ || echo "${VIG}" > $@
 
-build: clean ${TARGZ}
+#'@section Build
+build: clean ${TARGZ} #' build source package
 
 ${TARGZ}: ${PKGFILES} ${PKGBUILDFLAGSFILE}
 	${R} CMD build ${BUILDARGS} ${PKGDIR} | \
 	COLOURS=$(COLOURS) ${INCLUDEDIR}/color-output.sh
 
-vignettes:
+vignettes: #' build vignettes in ./${PKGDIR}/vignettes/
 	cd ${PKGDIR}/vignettes/ && \
 		test -f Makefile && \
 		make all || \
@@ -171,27 +102,40 @@ vignettes:
 				${R} CMD Sweave --engine=knitr::knitr --pdf $$v; \
 			done )
 
-check: CHECKARGS := $(filter-out --no-vignettes,$(CHECKARGS))
-check: | build check-only
+compile-attributes: #' run Rcpp::compileAttributes()
+	${R} -e "library(Rcpp); compileAttributes('"$(PKGDIR)"')";
 
-check-only:
+release: export R_PROFILE_USER=${RPROFILE}
+release: R := ${R} ${RELEASERARGS}
+release: CHECKARGS := ${RELEASECHECKARGS}
+release: BUILDARGS := ${RELEASEBUILDARGS}
+release: ${RELEASETARGETS} #' build package for Bioc/CRAN release (includes vignettes etc.)
+
+#'@section Check
+check: CHECKARGS := $(filter-out --no-vignettes,$(CHECKARGS))
+check: | build check-only #' build and check package; the check will always use "--no-vignettes" because vignettes are checked by the build process before
+
+check-only: #' check package and time checking
 	{ time ${TIMEFORMAT} ${R} CMD check ${CHECKARGS} ${TARGZ} 2>&1; } | \
 	COLOURS=$(COLOURS) ${INCLUDEDIR}/color-output.sh && \
 	grep "WARNING" ${PKGNAME}.Rcheck/00check.log > /dev/null ; \
 	if [ $$? -eq 0 ] ; then exit ${WARNINGS_AS_ERRORS}; fi
 
-bioccheck: | check bioccheck-only
+bioccheck: | check bioccheck-only #' build, check and BiocCheck package
 
-bioccheck-only:
+bioccheck-only: #' BiocCheck package
 	${R} CMD BiocCheck ${TARGZ} 2>&1 | \
 	COLOURS=$(COLOURS) ${INCLUDEDIR}/color-output.sh && \
 	grep "WARNING" ${PKGNAME}.Rcheck/00check.log > /dev/null ; \
 	if [ $$? -eq 0 ] ; then exit ${WARNINGS_AS_ERRORS}; fi
 
+check-reverse-dependencies: #' check packages which depend on this package
+check-downstream: #' check packages which depend on this package
 check-reverse-dependencies check-downstream: install
 	cd ${PKGDIR} && ${RSCRIPT} ${INCLUDEDIR}/check-reverse-dependencies.R
 
-clean:
+#'@section Clean
+clean: #' remove temporary files and .Rcheck
 	${RM} ${PKGDIR}/src/*.o ${PKGNAME}/src/*.so
 	${RM} ${PKGDIR}/*~
 	find . -name '.Rhistory' -exec rm '{}' \;
@@ -199,65 +143,96 @@ clean:
 	${RM} ${PKGDIR}/vignettes/\#*
 	${RM} ${PKGNAME}.Rcheck
 
-clean-tar:
+clean-tar: #' remove .tar.gz archive
 	${RM} ${TARGZ}
 
-clean-vignettes:
+clean-vignettes: #' remove vignettes in inst/doc/
 	test -f ${PKGDIR}/vignettes/Makefile && \
 		(cd ${PKGDIR}/vignettes/ && make clean) || \
 		( ${RM} $(VIGFILES:.Rnw=.pdf) && \
 	    ${RM} ${PKGDIR}/vignettes/.build.timestamp )
 
-clean-all: clean clean-tar clean-vignettes
+clean-all: clean clean-tar clean-vignettes #' combine "clean", "clean-tar" and "clean-vignettes"
 
-compile-attributes:
-	${R} -e "library(Rcpp); compileAttributes('"$(PKGDIR)"')";
-
-increment-version-major:
+#'@section Increment version
+increment-version-major: #' increment major version number (X++.1) and set the "Date" field in the DESCRIPTION file
 	@cd ${PKGDIR} && ${RSCRIPT} ${INCLUDEDIR}/increment-version.R major
 
-increment-version-minor:
+increment-version-minor: #' increment minor version number (1.X++) and set the "Date" field in the DESCRIPTION file
 	@cd ${PKGDIR} && ${RSCRIPT} ${INCLUDEDIR}/increment-version.R minor
 
-increment-version-patch:
+increment-version-patch: #' increment patch version number (1.1.X++) and set the "Date" field in the DESCRIPTION file
 	@cd ${PKGDIR} && ${RSCRIPT} ${INCLUDEDIR}/increment-version.R patch
 
-install: | build install-only
+#'@section Adminstration
+install: | build install-only #' build and install package
 
-install-only:
+install-only: #' install package
 	${R} CMD INSTALL ${INSTALLARGS} ${TARGZ} | \
 	COLOURS=$(COLOURS) ${INCLUDEDIR}/color-output.sh
 
-install-dependencies install-upstream:
+install-dependencies install-upstream: '# install package dependencies
 	cd ${PKGDIR} && ${RSCRIPT} ${INCLUDEDIR}/install-dependencies.R
 
-release: export R_PROFILE_USER=${RPROFILE}
-release: R := ${R} ${RELEASERARGS}
-release: CHECKARGS := ${RELEASECHECKARGS}
-release: BUILDARGS := ${RELEASEBUILDARGS}
-release: ${RELEASETARGETS}
-
-remove:
+remove: #' remove package
 	${R} CMD REMOVE ${PKGNAME}
 
-roxygen: clean
+#'@section Documentation
+roxygen: clean #' roxygenize package
 	${R} -e "library(roxygen2); roxygenize('"$(PKGDIR)"')";
 
-rd: clean
+rd: clean #' roxygenize rd rocklet
 	${R} -e "library(roxygen2); roxygenize('"$(PKGDIR)"', roclets=\"rd\")";
 
-run-demos:
-	cd ${PKGDIR} && ${RSCRIPT} ${INCLUDEDIR}/run-demos.R
-
-win-builder: check
-	ncftpput win-builder.r-project.org R-release ${TARGZ}
-
-
-maker: .maker
+#'@section Maker specific targets
+maker: .maker #' update maker toolbox
 
 .maker:
 	cd ${MAKERDIR} && git checkout master && git pull
 
-version:
+version: #' prints latest git hash and date of maker
 	@echo ${MAKERVERSION}
+
+#'@section Available variables
+#'@param PKG/PKGDIR path to the target package (default is 'maker')
+#'@param MAKERRC path to the maker configuration file (default is '~/.makerrc')
+#'@param VIG vignettes be build (default is 1). If 0, build --no-build-vignettes is used
+#'@param WARNINGS_AS_ERRORS fail on warnings (default is 1)
+#'@param CRAN check using --as-cran (default is 0)
+#'@param COLOURS using colours for R CMD check results (default is 1)
+#'@param RPROFILE path to .Rprofile (default is ${MAKEDIR}/include/Rprofile)
+#'@param TIMEFORMAT time format (default: empty)
+
+#'@section Misc
+#'@note Vignettes are not build when checking: R CMD check --no-build-vignettes\n
+
+win-builder: check #' build package and send to win-builder.r-project.org
+	ncftpput win-builder.r-project.org R-release ${TARGZ}
+
+run-demos: #' source and run demo/*.R files
+	cd ${PKGDIR} && ${RSCRIPT} ${INCLUDEDIR}/run-demos.R
+
+get-default-pkg: #' print current default PKG
+	@grep "^[[:space:]]*PKG[[:space:]]*=" ${MAKERRC} || echo "No default PKG set."
+
+set-default-pkg: #' set new default PKG
+	(test -f ${MAKERRC} && \
+	grep -q "^[[:space:]]*PKG[[:space:]]*=" ${MAKERRC} && \
+	sed -i --follow-symlinks 's/^[[:space:]]*PKG[[:space:]]*=.*/PKG=${PKG}/' ${MAKERRC}) || \
+	(echo PKG=${PKG} >> ${MAKERRC})
+	@echo
+	@echo "Default PKG set to ${PKG}."
+
+remove-default-pkg: #' remove current default PKG
+	(test -f ${MAKERRC} && \
+	sed -i --follow-symlinks '/^[[:space:]]*PKG[[:space:]]*=.*/d' ${MAKERRC})
+
+#'@section Getting help
+help target usage: #' print this help text
+	@sed -n "s/\\\\n/|/g; \
+					 s/^#' *@section \(.*\)$$/\n\1:\n/p; \
+					 s/^#' *@note \(.*\)$$/  \1/p; \
+ 				   s/^#' *@param \([^ ]*\) \+\(.*\)\$$/  \1\t\2/p; \
+					 s/^\([^:]\+\):.*#' \([^@]\+\)\$$/  \1\t\2/p" $(MAKEFILE_LIST) | expand -t 30 | tr '|' '\n'
+#'@note \n Create an issue on https://github.com/ComputationalProteomicsUnit/maker/issues/ or \n write an e-mail to Sebastian Gibb <mail@sebastiangibb.de> and Laurent Gatto <lg390@cam.ac.uk>.
 
