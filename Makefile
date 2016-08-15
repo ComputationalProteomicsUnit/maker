@@ -17,7 +17,7 @@ VERSION            = $(shell sed -n 's/Version: *//p' ${PKGDIR}/DESCRIPTION 2> /
 TARGZ              = ${PKGNAME}_${VERSION}.tar.gz
 BUILDARGS          := --no-build-vignettes
 CHECKARGS          := --no-vignettes --no-build-vignettes
-RELEASERARGS       := --no-save --no-restore --no-site-file --no-environ# --vanilla-=--no-init-file
+RELEASERARGS       := --no-save --no-restore --no-site-file --no-environ --vanilla --no-init-file
 RELEASETARGETS     := | clean-all build check-only
 INSTALLARGS        := --install-tests
 IGNORE             := ".git/* .svn/* sandbox/*"
