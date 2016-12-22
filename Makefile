@@ -184,6 +184,9 @@ roxygen: clean #' roxygenize package
 rd: clean #' roxygenize rd rocklet
 	${R} -e "library(roxygen2); roxygenize('"$(PKGDIR)"', roclets=\"rd\")";
 
+pkgdown: clean #' pkgdown site	
+	${R} -e "setwd('"$(PKGDIR)"'); library(pkgdown); build_site()";
+
 #'@section Maker specific targets
 maker: .maker #' update maker toolbox
 

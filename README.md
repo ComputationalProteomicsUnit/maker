@@ -80,6 +80,7 @@ Documentation:
 
   roxygen                     roxygenize package
   rd                          roxygenize rd rocklet
+  pkgdown                     pkgdown site                  
 
 Maker specific targets:
 
@@ -110,8 +111,8 @@ Misc:
 Getting help:
 
   help target usage           print this help text
-
- Create an issue on https://github.com/ComputationalProteomicsUnit/maker/issues/ or
+  
+ Create an issue on https://github.com/ComputationalProteomicsUnit/maker/issues/ or 
  write an e-mail to Sebastian Gibb <mail@sebastiangibb.de> and Laurent Gatto <lg390@cam.ac.uk>.
 ```
 
