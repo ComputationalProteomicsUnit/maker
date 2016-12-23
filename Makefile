@@ -184,7 +184,19 @@ roxygen: clean #' roxygenize package
 rd: clean #' roxygenize rd rocklet
 	${R} -e "library(roxygen2); roxygenize('"$(PKGDIR)"', roclets=\"rd\")";
 
-pkgdown: clean #' pkgdown site	
+pkg-home: clean #' pkgdown home
+	${R} -e "setwd('"$(PKGDIR)"'); library(pkgdown); build_home()";
+
+pkg-news: clean #' pkgdown news
+	${R} -e "setwd('"$(PKGDIR)"'); library(pkgdown); build_news()";
+
+pkg-refs: clean #' pkgdown references (manuals)
+	${R} -e "setwd('"$(PKGDIR)"'); library(pkgdown); build_reference()";
+
+pkg-vigs: clean #' pkgdown articles (Rmd vignettes)
+	${R} -e "setwd('"$(PKGDIR)"'); library(pkgdown); build_articles()";
+
+pkgdown: clean #' full pkgdown site	
 	${R} -e "setwd('"$(PKGDIR)"'); library(pkgdown); build_site()";
 
 #'@section Maker specific targets
