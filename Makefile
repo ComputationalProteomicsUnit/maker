@@ -196,7 +196,7 @@ pkg-refs: clean #' pkgdown references (manuals)
 pkg-vigs: clean #' pkgdown articles (Rmd vignettes)
 	${R} -e "setwd('"$(PKGDIR)"'); library(pkgdown); build_articles()";
 
-pkgdown: clean #' full pkgdown site	
+pkgdown: clean #' full pkgdown site: home, refs, ariticles and news (in that order)
 	${R} -e "setwd('"$(PKGDIR)"'); library(pkgdown); build_site()";
 
 #'@section Maker specific targets
