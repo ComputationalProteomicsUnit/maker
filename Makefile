@@ -75,7 +75,8 @@ endif
 	check-downstream check-reverse-dependencies clean clean-all clean-tar \
 	compile-attributes force help install install-only install-dependencies install-upstream \
 	maker .maker remove release roxygen rd run-demos \
-	targets usage win-builder version
+	targets usage win-builder version \
+	pkg-home pkg-news pkg-refs pkd-vigs pkgdown README.md
 
 #'@section Usage
 #'@note make TARGET PKG=package
@@ -198,6 +199,9 @@ pkg-vigs: clean #' pkgdown articles (Rmd vignettes)
 
 pkgdown: clean #' full pkgdown site: home, refs, articles and news (in that order)
 	${R} -e "setwd('"$(PKGDIR)"'); library(pkgdown); build_site()";
+
+README.md: # Knits README.Rmd if available
+	cd ${PKGDIR} && ${R} -e "if (file.exists('README.Rmd')) knitr::knit('README.Rmd')";
 
 #'@section Maker specific targets
 maker: .maker #' update maker toolbox
