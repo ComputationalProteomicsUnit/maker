@@ -200,7 +200,7 @@ pkg-vigs: clean #' pkgdown articles (Rmd vignettes)
 pkgdown: clean #' full pkgdown site: home, refs, articles and news (in that order)
 	${R} -e "setwd('"$(PKGDIR)"'); library(pkgdown); build_site()";
 
-README.md: # Knits README.Rmd if available
+README.md: #' knit README.Rmd if available
 	cd ${PKGDIR} && ${R} -e "if (file.exists('README.Rmd')) knitr::knit('README.Rmd')";
 
 #'@section Maker specific targets
