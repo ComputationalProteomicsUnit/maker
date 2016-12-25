@@ -80,11 +80,17 @@ Documentation:
 
   roxygen                     roxygenize package
   rd                          roxygenize rd rocklet
-  pkgdown                     pkgdown site                  
+  pkg-home                    pkgdown home
+  pkg-news                    pkgdown news
+  pkg-refs                    pkgdown references (manuals)
+  pkg-vigs                    pkgdown articles (Rmd vignettes)
+  pkgdown                     full pkgdown site: home, refs, articles and news (in that order)
+  README.md                   knit README.Rmd if available
 
 Maker specific targets:
 
   maker                       update maker toolbox
+  maker-README.md             update `make`help` output in README.md
   version                     prints latest git hash and date of maker
 
 Available variables:

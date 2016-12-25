@@ -28,7 +28,7 @@ PKGFILES           = $(shell find ${PKGDIR} -type f \( ${IGNOREPATTERN} \) 2>/de
 VIGFILES           = $(shell find ${PKGDIR} -type f -name *.Rnw 2>/dev/null)
 MAKERVERSION       := $(shell cd ${MAKERDIR} && git log -1 --format="%h [%ci]")
 ## targets that don't need an R package (PKG could be empty)
-NONPKGTARGETS      := get-default-pkg help maker targets usage version
+NONPKGTARGETS      := get-default-pkg help maker maker-README.md targets usage version
 
 PKGBUILDFLAGSFILE  := /tmp/${PKGNAME}.buildflags
 
@@ -74,7 +74,7 @@ endif
 .PHONEY: build vignettes check check-only bioccheck bioccheck-only \
 	check-downstream check-reverse-dependencies clean clean-all clean-tar \
 	compile-attributes force help install install-only install-dependencies install-upstream \
-	maker .maker remove release roxygen rd run-demos \
+	maker .maker maker-README.md remove release roxygen rd run-demos \
 	targets usage win-builder version \
 	pkg-home pkg-news pkg-refs pkd-vigs pkgdown README.md
 
@@ -208,6 +208,9 @@ maker: .maker #' update maker toolbox
 
 .maker:
 	cd ${MAKERDIR} && git checkout master && git pull
+
+maker-README.md: #' update `make`help` output in README.md
+	$(shell make help | sed -i '/^\$$ make help/,/^```$$/{/^\$$ make help$$/!{/^```$$/!d}}; /^\$$ make help/r /dev/stdin' README.md)
 
 version: #' prints latest git hash and date of maker
 	@echo ${MAKERVERSION}
