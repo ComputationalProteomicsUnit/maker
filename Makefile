@@ -76,7 +76,7 @@ endif
 	compile-attributes force help install install-only install-dependencies install-upstream \
 	maker .maker maker-README.md remove release roxygen rd run-demos \
 	targets usage win-builder version \
-	pkg-home pkg-news pkg-refs pkd-vigs pkgdown README.md
+	pkg-home pkg-news pkg-refs pkd-vigs pkgdown README.md NEWS
 
 #'@section Usage
 #'@note make TARGET PKG=package
@@ -202,6 +202,9 @@ pkgdown: clean #' full pkgdown site: home, refs, articles and news (in that orde
 
 README.md: #' knit README.Rmd if available
 	cd ${PKGDIR} && ${R} -e "if (file.exists('README.Rmd')) knitr::knit('README.Rmd')";
+
+NEWS: #' create plain text NEWS from NEWS.md if available
+	test -f ${PKGDIR}/NEWS.md && sed 's/^# .*$$\|^## //g' ${PKGDIR}/NEWS.md > ${PKGDIR}/NEWS
 
 #'@section Maker specific targets
 maker: .maker #' update maker toolbox
