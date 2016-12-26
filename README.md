@@ -86,6 +86,7 @@ Documentation:
   pkg-vigs                    pkgdown articles (Rmd vignettes)
   pkgdown                     full pkgdown site: home, refs, articles and news (in that order)
   README.md                   knit README.Rmd if available
+  NEWS                        create plain text NEWS from NEWS.md if available
 
 Maker specific targets:
 
