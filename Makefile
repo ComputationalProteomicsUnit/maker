@@ -76,7 +76,7 @@ endif
 	compile-attributes force help install install-only install-dependencies install-upstream \
 	maker .maker maker-README.md remove release roxygen rd run-demos \
 	targets usage win-builder version \
-	pkg-home pkg-news pkg-refs pkd-vigs pkgdown README.md NEWS
+	pkg-home pkg-news pkg-refs pkg-vigs pkg-all pkgdown README.md NEWS
 
 #'@section Usage
 #'@note make TARGET PKG=package
@@ -197,7 +197,13 @@ pkg-refs: clean #' pkgdown references (manuals)
 pkg-vigs: clean #' pkgdown articles (Rmd vignettes)
 	${R} -e "setwd('"$(PKGDIR)"'); library(pkgdown); build_articles()";
 
-pkgdown: clean #' full pkgdown site: home, refs, articles and news (in that order)
+pkg-all: clean #' pkgdonw home, refs, articles and news (in that order)
+	make pkg-home
+	make pkg-refs
+	make pkg-vigs
+	make pkg-news
+
+pkgdown: clean #' full pkgdown site using the pkgdown::build_site
 	${R} -e "setwd('"$(PKGDIR)"'); library(pkgdown); build_site()";
 
 README.md: #' knit README.Rmd if available

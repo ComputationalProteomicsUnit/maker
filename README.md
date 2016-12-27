@@ -84,7 +84,8 @@ Documentation:
   pkg-news                    pkgdown news
   pkg-refs                    pkgdown references (manuals)
   pkg-vigs                    pkgdown articles (Rmd vignettes)
-  pkgdown                     full pkgdown site: home, refs, articles and news (in that order)
+  pkg-all                     pkgdonw home, refs, articles and news (in that order)
+  pkgdown                     full pkgdown site using the pkgdown::build_site
   README.md                   knit README.Rmd if available
   NEWS                        create plain text NEWS from NEWS.md if available
 
