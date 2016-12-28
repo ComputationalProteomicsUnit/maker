@@ -27,6 +27,7 @@ INCLUDEDIR         := ${MAKERDIR}/include/
 PKGFILES           = $(shell find ${PKGDIR} -type f \( ${IGNOREPATTERN} \) 2>/dev/null)
 VIGFILES           = $(shell find ${PKGDIR} -type f -name *.Rnw 2>/dev/null)
 MAKERVERSION       := $(shell cd ${MAKERDIR} && git log -1 --format="%h [%ci]")
+MAKERMAKEFILE      := $(lastword $(MAKEFILE_LIST))
 ## targets that don't need an R package (PKG could be empty)
 NONPKGTARGETS      := get-default-pkg help maker maker-README.md targets usage version
 
@@ -198,10 +199,10 @@ pkg-vigs: clean #' pkgdown articles (Rmd vignettes)
 	${R} -e "setwd('"$(PKGDIR)"'); library(pkgdown); build_articles()";
 
 pkg-all: clean #' pkgdonw home, refs, articles and news (in that order)
-	make pkg-home
-	make pkg-refs
-	make pkg-vigs
-	make pkg-news
+	$(MAKE) -f $(MAKERMAKEFILE) pkg-home
+	$(MAKE) -f $(MAKERMAKEFILE) pkg-refs
+	$(MAKE) -f $(MAKERMAKEFILE) pkg-vigs
+	$(MAKE) -f $(MAKERMAKEFILE) pkg-news
 
 pkgdown: clean #' full pkgdown site using the pkgdown::build_site
 	${R} -e "setwd('"$(PKGDIR)"'); library(pkgdown); build_site()";
@@ -219,7 +220,7 @@ maker: .maker #' update maker toolbox
 	cd ${MAKERDIR} && git checkout master && git pull
 
 maker-README.md: #' update `make`help` output in README.md
-	$(shell make help | sed -i '/^\$$ make help/,/^```$$/{/^\$$ make help$$/!{/^```$$/!d}}; /^\$$ make help/r /dev/stdin' README.md)
+	$(MAKE) --silent help | sed -i '/^\$$ make help/,/^```$$/{/^\$$ make help$$/!{/^```$$/!d}}; /^\$$ make help/r /dev/stdin' README.md
 
 version: #' prints latest git hash and date of maker
 	@echo ${MAKERVERSION}
