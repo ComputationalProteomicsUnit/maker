@@ -72,7 +72,7 @@ ifeq (${BIOC},1)
   RELEASETARGETS += bioccheck-only
 endif
 
-.PHONEY: build vignettes check check-only bioccheck bioccheck-only \
+.PHONY: build vignettes check check-only bioccheck bioccheck-only \
 	check-downstream check-reverse-dependencies clean clean-all clean-tar \
 	compile-attributes force help install install-only install-dependencies install-upstream \
 	maker .maker maker-README.md remove release roxygen rd run-demos \
