@@ -239,7 +239,7 @@ version: #' prints latest git hash and date of maker
 #'@note Vignettes are not build when checking: R CMD check --no-build-vignettes\n
 
 win-builder: check #' build package and send to win-builder.r-project.org
-	ncftpput win-builder.r-project.org R-release ${TARGZ}
+	ncftpput win-builder.r-project.org R-devel ${TARGZ}
 
 run-demos: #' source and run demo/*.R files
 	cd ${PKGDIR} && ${RSCRIPT} ${INCLUDEDIR}/run-demos.R
