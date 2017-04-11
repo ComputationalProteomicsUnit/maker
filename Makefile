@@ -219,7 +219,7 @@ maker: .maker #' update maker toolbox
 .maker:
 	cd ${MAKERDIR} && git checkout master && git pull
 
-maker-README.md: #' update `make`help` output in README.md
+maker-README.md: #' update help output in README.md
 	$(MAKE) --silent help | sed -i '/^\$$ make help/,/^```$$/{/^\$$ make help$$/!{/^```$$/!d}}; /^\$$ make help/r /dev/stdin' README.md
 
 version: #' prints latest git hash and date of maker

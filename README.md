@@ -92,7 +92,7 @@ Documentation:
 Maker specific targets:
 
   maker                       update maker toolbox
-  maker-README.md             update `make`help` output in README.md
+  maker-README.md             update help output in README.md
   version                     prints latest git hash and date of maker
 
 Available variables:
