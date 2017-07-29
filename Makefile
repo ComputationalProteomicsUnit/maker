@@ -184,7 +184,7 @@ roxygen: clean #' roxygenize package
 	${R} -e "library(roxygen2); roxygenize('"$(PKGDIR)"')";
 
 rd: clean #' roxygenize rd rocklet
-	${R} -e "library(roxygen2); roxygenize('"$(PKGDIR)"', roclets=\"rd\")";
+	${R} -e "library(devtools); document('"$(PKGDIR)"', roclets=\"rd\")";
 
 pkg-home: clean #' pkgdown home
 	${R} -e "setwd('"$(PKGDIR)"'); library(pkgdown); build_home()";
