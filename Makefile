@@ -211,7 +211,7 @@ README.md: #' knit README.Rmd if available
 	cd ${PKGDIR} && ${R} -e "if (file.exists('README.Rmd')) knitr::knit('README.Rmd')";
 
 NEWS: #' create plain text NEWS from NEWS.md if available
-	test -f ${PKGDIR}/NEWS.md && sed '/^# .*$$/d; /^## .*$$/{s/^## //g; p; s/./-/g}; /^###\+/{s/./\u&/g}; s/^##\+ //g; 1,2{/^[[:space:]]*$$/d}' ${PKGDIR}/NEWS.md > ${PKGDIR}/NEWS
+	test -f ${PKGDIR}/NEWS.md && sed '/^# .*$$/d; /^## .*$$/{s/^## //g; p; s/./-/g}; /^###\+/{s/./\u&/g}; s/^##\+ //g; 1,2{/^[[:space:]]*$$/d}; s/\[\(#[0-9]\+\)\]([^)]\+)/\1/g' ${PKGDIR}/NEWS.md > ${PKGDIR}/NEWS
 
 #'@section Maker specific targets
 maker: .maker #' update maker toolbox
