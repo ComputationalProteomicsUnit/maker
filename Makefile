@@ -76,7 +76,7 @@ endif
 	check-downstream check-reverse-dependencies clean clean-all clean-tar \
 	compile-attributes force help install install-only install-dependencies install-upstream \
 	maker .maker maker-README.md remove release roxygen rd run-demos \
-	targets usage win-builder version \
+	setup-git-hooks targets usage win-builder version \
 	pkg-home pkg-news pkg-refs pkg-vigs pkg-all pkgdown README.md NEWS
 
 #'@section Usage
@@ -258,6 +258,9 @@ set-default-pkg: #' set new default PKG
 remove-default-pkg: #' remove current default PKG
 	(test -f ${MAKERRC} && \
 	sed -i --follow-symlinks '/^[[:space:]]*PKG[[:space:]]*=.*/d' ${MAKERRC})
+
+setup-git-hooks: #' setup git hooks
+	${MAKERDIR}/hooks/setup-hooks.sh ${PKGDIR}
 
 #'@section Getting help
 help target usage: #' print this help text
