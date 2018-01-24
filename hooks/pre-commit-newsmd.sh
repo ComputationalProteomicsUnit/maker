@@ -2,10 +2,10 @@
 REPOURL=$(git config --get remote.origin.url | sed 's/^.*git@github.com:/https:\/\/github.com\//; s/.git$/\/issues\//g; s/\//\\\//g')
 
 # Replace #XXX issue numbers by [#XXX](https://github.com/lgatto/MSnbase/issues/XXX
-sed -i '/\(^\|[^[]\)#[0-9]\+[^]]\?/{s/#\([0-9]\+\)/[#\1]('${REPOURL}'\1)/g;h};${x;/./{x;q1};x;q0}' NEWS.md
+sed -i '/\(^\| \)#[0-9]\+[^]]\?/{s/#\([0-9]\+\)/[#\1]('${REPOURL}'\1)/g;h};${x;/./{x;q1};x;q0}' NEWS.md
 ## explanation:
 ## sed -i (in place replacement)
-## /[^[]#[0-9]\+[^]]/ search for issues #XXX not already surounded by "["/"]"
+## /#[0-9]\+[^]]/ search for issues #XXX at the beginning of a line or after a space
 ## and apply the substition command just to this numbers
 ## {s/#\([0-9]\+\)/[#\1](https:\/\/github.com\/lgatto\/MSnbase\/issues\/\1)/g;}
 ## build the link
