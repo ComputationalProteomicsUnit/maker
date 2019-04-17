@@ -9,10 +9,10 @@ external `Rscript` dependencies.
 You are welcome to:
 
 * submit suggestions and bug-reports at:
-    <https://github.com/ComputationalProteomicsUnit/maker/issues>
+	<https://github.com/ComputationalProteomicsUnit/maker/issues>
 
 * fork and send a pull request on:
-    <https://github.com/ComputationalProteomicsUnit/maker/>
+	<https://github.com/ComputationalProteomicsUnit/maker/>
 
 * compose an e-mail to: <mail@sebastiangibb.de>
 
@@ -29,7 +29,7 @@ symlinks and use it.
 
 ## Update `maker`
 
-    make maker
+	make maker
 
 ## Help
 
@@ -39,7 +39,7 @@ $ make help
 Usage:
 
   make TARGET PKG=package
-    e.g. make build PKG=MSnbase
+	e.g. make build PKG=MSnbase
 
 Build:
 
@@ -119,9 +119,9 @@ Misc:
 Getting help:
 
   help target usage           print this help text
-  
- Create an issue on https://github.com/ComputationalProteomicsUnit/maker/issues/ or 
- write an e-mail to Sebastian Gibb <mail@sebastiangibb.de> and Laurent Gatto <lg390@cam.ac.uk>.
+
+ Create an issue on https://github.com/ComputationalProteomicsUnit/maker/issues/ or
+ write an e-mail to Sebastian Gibb <mail@sebastiangibb.de> and Laurent Gatto <laurent.gatto@uclouvain.be>.
 ```
 
 ## Additional targets via external Makefile

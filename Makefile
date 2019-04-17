@@ -272,4 +272,4 @@ help target usage: #' print this help text
 					 s/^#' *@note \(.*\)$$/  \1/p; \
 				   s/^#' *@param \([^ ]*\) \+\(.*\)\$$/  \1\t\2/p; \
 					 s/^\([^:]\+\):.*#' \([^@]\+\)\$$/  \1\t\2/p" $(MAKEFILE_LIST) | expand -t 30 | tr '|' '\n'
-#'@note \n Create an issue on https://github.com/ComputationalProteomicsUnit/maker/issues/ or \n write an e-mail to Sebastian Gibb <mail@sebastiangibb.de> and Laurent Gatto <lg390@cam.ac.uk>.
+#'@note \n Create an issue on https://github.com/ComputationalProteomicsUnit/maker/issues/ or \n write an e-mail to Sebastian Gibb <mail@sebastiangibb.de> and Laurent Gatto <laurent.gatto@uclouvain.be>.
