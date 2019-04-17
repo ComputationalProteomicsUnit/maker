@@ -75,7 +75,7 @@ endif
 .PHONY: build vignettes check check-only bioccheck bioccheck-only \
 	check-downstream check-reverse-dependencies clean clean-all clean-tar \
 	compile-attributes force help install install-only install-dependencies install-upstream \
-	maker .maker maker-README.md remove release roxygen rd run-demos \
+	maker .maker maker-README.md remove release roxygen document rd run-demos \
 	setup-git-hooks targets usage win-builder version \
 	pkg-home pkg-news pkg-refs pkg-vigs pkg-all pkgdown README.md NEWS
 
@@ -183,6 +183,9 @@ remove: #' remove package
 roxygen: clean #' roxygenize package
 	${R} -e "library(roxygen2); roxygenize('"$(PKGDIR)"')";
 
+document: clean #' document package
+	${R} -e "library(devtools); document('"$(PKGDIR)"')";
+
 rd: clean #' roxygenize rd rocklet
 	${R} -e "library(devtools); document('"$(PKGDIR)"', roclets=\"rd\")";
 
@@ -267,7 +270,6 @@ help target usage: #' print this help text
 	@sed -n "s/\\\\n/|/g; \
 					 s/^#' *@section \(.*\)$$/\n\1:\n/p; \
 					 s/^#' *@note \(.*\)$$/  \1/p; \
- 				   s/^#' *@param \([^ ]*\) \+\(.*\)\$$/  \1\t\2/p; \
+				   s/^#' *@param \([^ ]*\) \+\(.*\)\$$/  \1\t\2/p; \
 					 s/^\([^:]\+\):.*#' \([^@]\+\)\$$/  \1\t\2/p" $(MAKEFILE_LIST) | expand -t 30 | tr '|' '\n'
 #'@note \n Create an issue on https://github.com/ComputationalProteomicsUnit/maker/issues/ or \n write an e-mail to Sebastian Gibb <mail@sebastiangibb.de> and Laurent Gatto <lg390@cam.ac.uk>.
-
