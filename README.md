@@ -39,7 +39,7 @@ $ make help
 Usage:
 
   make TARGET PKG=package
-	e.g. make build PKG=MSnbase
+    e.g. make build PKG=MSnbase
 
 Build:
 
@@ -79,6 +79,7 @@ Adminstration:
 Documentation:
 
   roxygen                     roxygenize package
+  document                    document package
   rd                          roxygenize rd rocklet
   pkg-home                    pkgdown home
   pkg-news                    pkgdown news
@@ -87,7 +88,7 @@ Documentation:
   pkg-all                     pkgdonw home, refs, articles and news (in that order)
   pkgdown                     full pkgdown site using the pkgdown::build_site
   README.md                   knit README.Rmd if available
-  NEWS                        create plain text NEWS from NEWS.md if available
+  NEWS                        defunct: see issue 33 (`news()` supports `NEWS.md` now)
 
 Maker specific targets:
 
@@ -115,12 +116,13 @@ Misc:
   get-default-pkg             print current default PKG
   set-default-pkg             set new default PKG
   remove-default-pkg          remove current default PKG
+  setup-git-hooks             setup git hooks
 
 Getting help:
 
   help target usage           print this help text
-
- Create an issue on https://github.com/ComputationalProteomicsUnit/maker/issues/ or
+  
+ Create an issue on https://github.com/ComputationalProteomicsUnit/maker/issues/ or 
  write an e-mail to Sebastian Gibb <mail@sebastiangibb.de> and Laurent Gatto <laurent.gatto@uclouvain.be>.
 ```
 

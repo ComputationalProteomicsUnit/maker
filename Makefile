@@ -213,8 +213,8 @@ pkgdown: clean #' full pkgdown site using the pkgdown::build_site
 README.md: #' knit README.Rmd if available
 	cd ${PKGDIR} && ${R} -e "if (file.exists('README.Rmd')) knitr::knit('README.Rmd')";
 
-NEWS: #' create plain text NEWS from NEWS.md if available
-	test -f ${PKGDIR}/NEWS.md && sed '/^# .*$$/d; /^## .*$$/{s/^## //g; p; s/./-/g}; /^###\+/{s/./\u&/g}; s/^##\+ //g; 1,2{/^[[:space:]]*$$/d}; s/\[\(#[0-9]\+\)\]([^)]\+)/\1/g' ${PKGDIR}/NEWS.md > ${PKGDIR}/NEWS
+NEWS: #' defunct: see issue 33 (`news()` supports `NEWS.md` now)
+	@echo "Defunct: \`news()\` supports \`NEWS.md\` files since R 3.6.0; see also https://github.com/ComputationalProteomicsUnit/maker/issues/33."
 
 #'@section Maker specific targets
 maker: .maker #' update maker toolbox
