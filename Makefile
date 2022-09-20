@@ -126,7 +126,7 @@ check-only: #' check package and time checking
 bioccheck: | check bioccheck-only #' build, check and BiocCheck package
 
 bioccheck-only: #' BiocCheck package
-	${R} CMD BiocCheck ${TARGZ} 2>&1 | \
+	${R} -e 'BiocCheck::BiocCheck("${TARGZ}")' 2>&1 | \
 	COLOURS=$(COLOURS) ${INCLUDEDIR}/color-output.sh && \
 	grep "WARNING" ${PKGNAME}.Rcheck/00check.log > /dev/null ; \
 	if [ $$? -eq 0 ] ; then exit ${WARNINGS_AS_ERRORS}; fi
