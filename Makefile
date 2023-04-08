@@ -210,6 +210,9 @@ pkg-all: clean #' pkgdonw home, refs, articles and news (in that order)
 pkgdown: clean #' full pkgdown site using the pkgdown::build_site
 	${R} -e "setwd('"$(PKGDIR)"'); library(pkgdown); build_site()";
 
+deploy: clean #' deploy pkgdown to branch
+	${R} -e "setwd('"$(PKGDIR)"'); pkgdown::deploy_to_branch(new_process = FALSE)";
+
 README.md: #' knit README.Rmd if available
 	cd ${PKGDIR} && ${R} -e "if (file.exists('README.Rmd')) knitr::knit('README.Rmd')";
 
